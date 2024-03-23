@@ -12,5 +12,4 @@
         android:icon="@drawable/baseline_logout_24"
         android:title="Log Out"
         app:showAsAction="ifRoom"/>
-
 </menu>

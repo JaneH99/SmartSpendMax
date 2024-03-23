@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/budget"
-        android:icon="@drawable/baseline_business_24"
+        android:icon="@drawable/baseline_budget2_24"
         android:title="Budget"/>
 
     <item

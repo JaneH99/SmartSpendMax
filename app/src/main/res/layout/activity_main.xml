@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
-        android:background="@color/darkPurple"
+        android:background="@color/colorWhite"
         app:logo="@drawable/baseline_attach_money_24"
         app:menu="@menu/toolbar_menu"
         app:titleMarginStart="30dp"
@@ -19,13 +19,13 @@
 
 
     <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:id="@+id/fragment_container"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
@@ -37,6 +37,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_container"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/colorWhite"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"
+        app:itemIconSize="32dp"
         app:menu="@menu/bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
