@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="darkPurple">#4a2f92</color>
-    <color name="mediumPurple">#7f6caf</color>
-    <color name="lightPurple">#cabee6</color>
-    <color name="grey">#BFBEBE</color>
+    <!-- Base application colors -->
+    <color name="colorPrimary">#89A4B7</color>
+    <color name="colorSecondary">#406E8E</color>
+    <color name="colorPrimaryDark">#303A56</color> <!-- buttons -->
+    <color name="colorPrimaryMedium">#336D97</color>
+    <color name="colorPrimaryLight">#D8E8E9</color>
+    <color name="colorAccent">#CE4141</color>
+
+    <!-- Standard colors for Banners / secondary fragments -->
+    <color name="color">#E1474D</color>
+    <color name="colorTextSecondary">#EAAEA4</color>
+    <color name="colorBackground">#FFB350</color>
+    <color name="colorSurface">#86BFAB</color>
+
+
+    <!-- Colors for budget -->
+    <color name="colorHousing">#F18056</color>
+    <color name="colorTransportation">#EDB86E</color>
+    <color name="colorGrocery">#EAAEA4</color>
+    <color name="colorUtility">#9FBE58</color>
+    <color name="colorPersonalExpense">#78B8B4</color>
+    <color name="colorOther">#297270</color>
+
+    <!-- Colors for Basics -->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorDefaultBackground">#FFF7FF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorShadow">#FBBAB0</color>
+    <color name="colorSelected">#303A56</color>
+
 </resources>
