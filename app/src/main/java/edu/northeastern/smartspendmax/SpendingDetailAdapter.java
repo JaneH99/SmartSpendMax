@@ -32,7 +32,8 @@ public class SpendingDetailAdapter extends RecyclerView.Adapter<SpendingDetailAd
         SpendingTransaction transaction = transactions.get(position);
         holder.transactionDate.setText(String.valueOf(transaction.getTransactionDate()));
         holder.vendor.setText(transaction.getVendor());
-        holder.transactionAmount.setText(String.valueOf(transaction.getAmount()));
+        String formattedTotalSpending = String.format("%.2f", transaction.getAmount());
+        holder.transactionAmount.setText(formattedTotalSpending);
     }
 
     @Override

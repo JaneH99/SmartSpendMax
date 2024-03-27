@@ -60,11 +60,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         }
 
         SpendingDetailAdapter adapter = new SpendingDetailAdapter(list);
-//        holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(holder.itemView.getContext(),LinearLayoutManager.VERTICAL,false);
-        layoutManager.setInitialPrefetchItemCount(spendingInCurrentCategory.getSpendingInTheCategory().size());
-        holder.nestedRecyclerView.setLayoutManager(layoutManager);
-
+        holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.nestedRecyclerView.setHasFixedSize(true);
         holder.nestedRecyclerView.setAdapter(adapter);
 
@@ -72,9 +68,16 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
-                spendingInCurrentCategory.setExpandable(!spendingInCurrentCategory.isExpandable());
-                list = spendingInCurrentCategory.getSpendingInTheCategory();
-                notifyDataSetChanged();
+                if(!spendingInCurrentCategory.isExpandable()) {
+                    spendingInCurrentCategory.setExpandable(!spendingInCurrentCategory.isExpandable());
+                    list = spendingInCurrentCategory.getSpendingInTheCategory();
+                    notifyItemChanged(holder.getAdapterPosition());
+                } else {
+                    spendingInCurrentCategory.setExpandable(!spendingInCurrentCategory.isExpandable());
+                    list = new ArrayList<>();
+                    notifyItemChanged(holder.getAdapterPosition());
+                }
+
             }
         });
 

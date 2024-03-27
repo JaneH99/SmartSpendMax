@@ -50,7 +50,7 @@ public class SpendingFragment extends Fragment {
         SpendingInOneCategory spendingInOneCategory2 = new SpendingInOneCategory(Category.HOUSING, listOfOneCategory2,false);
 
         SpendingTransaction t5 = new SpendingTransaction(LocalDate.of(2023,3,15), Category.UTILITIES,
-                "Avalon",2000);
+                "Gas",200);
         List<SpendingTransaction> listOfOneCategory3 = new ArrayList<>();
         listOfOneCategory3.add(t5);
         SpendingInOneCategory spendingInOneCategory3 = new SpendingInOneCategory(Category.UTILITIES, listOfOneCategory3,false);
