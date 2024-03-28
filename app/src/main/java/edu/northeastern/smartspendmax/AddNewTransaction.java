@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,9 +21,14 @@ import android.widget.Toast;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class AddNewTransaction extends AppCompatActivity {
@@ -33,6 +39,8 @@ public class AddNewTransaction extends AppCompatActivity {
     private EditText transactionAmount;
     private Button saveTransaction;
     private LocalDate date;
+    private DatabaseReference usersRef;
+    private String curUserName;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -49,7 +57,10 @@ public class AddNewTransaction extends AppCompatActivity {
 
         //Set today's date as default transaction date
         date = LocalDate.now();
-        transactionDate.setText(date.getMonthValue() +"/" + date.getDayOfMonth() + "/" + date.getYear());
+//        transactionDate.setText(date.getMonthValue() +"/" + date.getDayOfMonth() + "/" + date.getYear());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String formattedDate = date.format(formatter);
+        transactionDate.setText(formattedDate);
 
         //Back button at top
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -77,7 +88,7 @@ public class AddNewTransaction extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(validateInput()) {
-                    //TODO: Save data in database
+                    saveDataToDB();
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please verify your input", Toast.LENGTH_LONG).show();
@@ -85,6 +96,32 @@ public class AddNewTransaction extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void saveDataToDB() {
+        //hard code now. Need to modify later
+        curUserName = "user1";
+
+        String category = spinner.getSelectedItem().toString().toLowerCase();
+        String date = transactionDate.getText().toString();
+        String vendor = transactionVendor.getText().toString();
+        Number amount = Double.valueOf(transactionAmount.getText().toString());
+
+        //Save data to database
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("spendings").child(curUserName);
+        String key = dbRef.push().getKey();
+        HashMap<String,Object> transactoionInfo = new HashMap<>();
+        transactoionInfo.put("category", category);
+        transactoionInfo.put("vendor", vendor);
+        transactoionInfo.put("amount", amount);
+        transactoionInfo.put("timestamp", date);
+
+        if (key != null) {
+            dbRef.child(key).setValue(transactoionInfo)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(getApplicationContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(
+                            e -> Toast.makeText(getApplicationContext(), "Failed to save the transaction", Toast.LENGTH_SHORT).show());
+        }
     }
 
     //Check if user input all data regarding a transaction
@@ -116,7 +153,9 @@ public class AddNewTransaction extends AppCompatActivity {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        transactionDate.setText((month + 1) + "/" +dayOfMonth + "/" + year);
+                        String formattedMonth = String.format("%02d", month + 1);
+                        String formattedDay = String.format("%02d", dayOfMonth);
+                        transactionDate.setText(formattedMonth + "/" + formattedDay + "/" + year);
                     }
                 },
                 year, month, dayOfMonth
