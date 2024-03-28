@@ -2,4 +2,13 @@
     <string name="app_name">SmartSpendMax</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="transactionCategoryArray">
+        <item></item>
+        <item>Housing</item>
+        <item>Transportation</item>
+        <item>Grocery</item>
+        <item>Utilities</item>
+        <item>Personal Expense</item>
+        <item>Other</item>
+    </string-array>
 </resources>
