@@ -43,22 +43,43 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
     public void onBindViewHolder(@NonNull SpendingHolder holder, int position) {
         Log.d(TAG,String.valueOf(position));
         SpendingInOneCategory spendingInCurrentCategory = spendingInCategories.get(position);
+
+        //Set icon
+        Category currentCategory = spendingInCurrentCategory.getCategory();
+        if(currentCategory == Category.HOUSING) {
+            holder.categoryIcon.setImageResource(R.drawable.housing_background);
+        } else if(currentCategory == Category.GROCERY) {
+            holder.categoryIcon.setImageResource(R.drawable.grocery_background);
+        } else if(currentCategory == Category.TRANSPORTATION) {
+            holder.categoryIcon.setImageResource(R.drawable.transpotation_background);
+        } else if(currentCategory == Category.UTILITIES) {
+            holder.categoryIcon.setImageResource(R.drawable.utility_background);
+        } else if(currentCategory == Category.PERSONAL_EXPENSE) {
+            holder.categoryIcon.setImageResource(R.drawable.personalexpense_background);
+        } else if(currentCategory == Category.OTHER) {
+            holder.categoryIcon.setImageResource(R.drawable.otherspending_background);
+        }
+
+        //Set category
         holder.spendingCategory.setText(spendingInCurrentCategory.getCategory().getStringValue());
+
+        //Set total amount for the category
         double totalSpending = 0.00;
         for(SpendingTransaction transaction: spendingInCurrentCategory.getSpendingInTheCategory()) {
             totalSpending += transaction.getAmount();
         }
         String formattedTotalSpending = String.format("%.2f", totalSpending);
         holder.spendingCategoryAmount.setText(formattedTotalSpending);
+
         boolean isExpandable = spendingInCurrentCategory.isExpandable();
         holder.expandableLayout.setVisibility(isExpandable ? View.VISIBLE : View.INVISIBLE);
-
         if(isExpandable) {
             holder.arrowImage.setImageResource(R.drawable.baseline_keyboard_arrow_up_24);
         } else {
             holder.arrowImage.setImageResource(R.drawable.baseline_keyboard_arrow_down_24);
         }
 
+        //Set nested recycler view
         SpendingDetailAdapter adapter = new SpendingDetailAdapter(list);
         holder.nestedRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.nestedRecyclerView.setHasFixedSize(true);
@@ -91,6 +112,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
 
     public static class SpendingHolder extends RecyclerView.ViewHolder {
 
+        private ImageView categoryIcon;
         private TextView spendingCategory;
         private TextView spendingCategoryAmount;
         private ImageView arrowImage;
@@ -106,6 +128,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
             linearLayout = itemView.findViewById(R.id.linear_layout);
             expandableLayout = itemView.findViewById(R.id.expandable_layout);
             nestedRecyclerView = itemView.findViewById(R.id.nested_recycler_view);
+            categoryIcon = itemView.findViewById(R.id.category_icon);
         }
     }
 }

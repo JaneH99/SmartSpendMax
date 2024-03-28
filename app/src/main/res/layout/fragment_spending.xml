@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textStyle="bold"
-        android:text="Spending"
+        android:text="SPENDING"
         android:textSize="20dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="60dp" />
+        android:layout_marginTop="18dp"
+        android:textColor="@color/colorPrimary"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -22,5 +23,15 @@
         android:layout_height="match_parent"
         android:layout_below="@id/spending_text" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:contentDescription="Add New Transaction"
+        android:src="@drawable/baseline_edit_note_24"
+        app:backgroundTint="@color/colorPrimary"/>
 
 </RelativeLayout>

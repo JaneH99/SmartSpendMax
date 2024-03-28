@@ -1,5 +1,6 @@
 package edu.northeastern.smartspendmax;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ public class SpendingFragment extends Fragment {
     private RecyclerView recyclerView;
     private SpendingAdapter spendingAdapter;
     private List<SpendingInOneCategory> mylist;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +66,22 @@ public class SpendingFragment extends Fragment {
 
         spendingAdapter = new SpendingAdapter(mylist);
         recyclerView.setAdapter(spendingAdapter);
+
+        //Floating Button
+        fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event
+                addNewTransaction();
+            }
+        });
+        
         return view;
+    }
+
+    private void addNewTransaction() {
+        Intent intent = new Intent(requireContext(), AddNewTransaction.class);
+        startActivity(intent);
     }
 }
