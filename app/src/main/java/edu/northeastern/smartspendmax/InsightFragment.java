@@ -3,8 +3,12 @@ package edu.northeastern.smartspendmax;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,9 @@ import java.util.List;
 public class InsightFragment extends Fragment {
     List<PieEntry> pieEntryList =new ArrayList<>();
     PieChart pieChart;
+    RecyclerView recyclerView;
+    CategoryInsightAdapter adapter;
+    List<CategoryInsight> categoryInsights;
     final int OFFSET_VALUE = 3;
     final int ICON_MARGIN = 5;
 
@@ -34,6 +41,10 @@ public class InsightFragment extends Fragment {
         pieChart =view.findViewById(R.id.expenseChart);
         setValues();
         setUpChart();
+
+        // Setup RecyclerView
+        recyclerView = view.findViewById(R.id.insight_recyclerView);
+        setupRecyclerView();
 
         return view;
 
@@ -64,21 +75,6 @@ public class InsightFragment extends Fragment {
         icons.add(ContextCompat.getDrawable(getContext(), R.drawable.personalexpense_background));
         icons.add(ContextCompat.getDrawable(getContext(), R.drawable.otherspending_background));
 
-        // Calculate the angle step
-//        int chartRadiusPlusMargin = pieChart.getWidth() / 2 + ICON_MARGIN;
-//        float angleStep = 360f / pieEntryList.size();
-//        ArrayList<MPPointF> offsets = new ArrayList<>();
-//
-//        // Loop to assign icons to each PieEntry (assuming the order matches)
-//        for (int i = 0; i < pieEntryList.size(); i++) {
-//            float angle = (float) Math.toRadians(-angleStep * i - angleStep / 2);
-//            // Calculate offset for icon
-//            float xOffset = (float) (Math.cos(angle) * chartRadiusPlusMargin);
-//            float yOffset = (float) (Math.sin(angle) * chartRadiusPlusMargin +5);
-//            offsets.add(new MPPointF(xOffset, yOffset));
-//            pieEntryList.get(i).setIcon(icons.get(i));
-//        }
-
         pieDataSet.setValueTextColor(getResources().getColor(R.color.colorWhite));
         pieDataSet.setValueTextSize(16f);
 
@@ -95,12 +91,28 @@ public class InsightFragment extends Fragment {
 
     }
 
+    private void setupRecyclerView() {
+        // Initialize your data list
+        categoryInsights = new ArrayList<>();
+        // Dummy data, replace or modify according to your actual data source
+        categoryInsights.add(new CategoryInsight("Housing", 1800, 2000, 200));
+        categoryInsights.add(new CategoryInsight("Transportation", 420.52, 800, 200));
+
+        adapter = new CategoryInsightAdapter(categoryInsights);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(adapter);
+    }
+
     private void setValues(){
         pieEntryList.add(new PieEntry(1800,"Housing"));
-        pieEntryList.add(new PieEntry(600,"Transport"));
+        pieEntryList.add(new PieEntry(600,"Transportation"));
         pieEntryList.add(new PieEntry(800,"Grocery"));
         pieEntryList.add(new PieEntry(200,"Utilities"));
         pieEntryList.add(new PieEntry(500,"Personal Expense"));
         pieEntryList.add(new PieEntry(1200,"Other"));
-    }
+
+         }
+
+
+
 }
