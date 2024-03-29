@@ -1,12 +1,20 @@
 package edu.northeastern.smartspendmax;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class SpendingInOneCategory {
+public class SpendingInOneCategory{
 
     private Category category;
     private List<SpendingTransaction> spendingInTheCategory;
     private boolean isExpandable;
+
+    public SpendingInOneCategory(Category category) {
+        this.category = category;
+        this.spendingInTheCategory = new ArrayList<>();
+        this.isExpandable = false;
+    }
 
     public SpendingInOneCategory(Category category, List<SpendingTransaction> spendingInTheCategory, boolean isExpandable) {
         this.category = category;
@@ -36,5 +44,15 @@ public class SpendingInOneCategory {
 
     public void setExpandable(boolean expandable) {
         isExpandable = expandable;
+    }
+
+    public void sortByTransactionDate() {
+        spendingInTheCategory.sort(new Comparator<SpendingTransaction>() {
+            @Override
+            public int compare(SpendingTransaction transaction1, SpendingTransaction transaction2) {
+                // Compare transaction dates
+                return transaction2.getTransactionDate().compareTo(transaction1.getTransactionDate());
+            }
+        });
     }
 }
