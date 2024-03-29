@@ -23,11 +23,13 @@
     <color name="colorPersonalExpense">#78B8B4</color>
     <color name="colorOther">#297270</color>
 
+
     <!-- Colors for Basics -->
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorDefaultBackground">#FFF7FF</color>
     <color name="colorBlack">#000000</color>
     <color name="colorShadow">#FBBAB0</color>
     <color name="colorSelected">#303A56</color>
+
 
 </resources>
