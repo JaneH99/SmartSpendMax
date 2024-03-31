@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -8,8 +9,8 @@
 
     <ImageView
         android:id="@+id/item_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="41dp"
+        android:layout_height="42dp"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
         android:src="@drawable/otherspending_background" />
@@ -28,21 +29,25 @@
             <TextView
                 android:id="@+id/item_text_left"
                 android:layout_width="0dp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:text="Budget Used/Total Budget"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10dp"
+                tools:ignore="TextSizeCheck" />
 
             <TextView
                 android:id="@+id/item_text_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="12dp"
+                android:layout_marginRight="8dp"
                 android:text="Budget Left"
-                android:textAppearance="?attr/textAppearanceListItem" />
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10dp"
+                tools:ignore="TextSizeCheck" />
         </LinearLayout>
 
         <ProgressBar
@@ -50,8 +55,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:layout_margin="8dp"
-
+            android:layout_margin="6dp"
             android:background="@drawable/progress_bar_background"
             android:indeterminate="false"
             android:max="100"

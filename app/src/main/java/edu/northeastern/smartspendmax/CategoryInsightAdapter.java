@@ -2,6 +2,7 @@ package edu.northeastern.smartspendmax;
 
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,24 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsightAdapter.ViewHolder> {
     private List<CategoryInsight> itemInsights;
     int progressColor;
 
+    private String TAG = "------CatAdapter------";
+
     public CategoryInsightAdapter(List<CategoryInsight> itemInsights) {
         this.itemInsights = itemInsights; // Corrected
+    }
+
+    public List<CategoryInsight> getItemInsights() {
+        return itemInsights;
+    }
+
+    public void setItemInsights(List<CategoryInsight> itemInsights) {
+        this.itemInsights = itemInsights;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,18 +52,28 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
 
     @Override
     public CategoryInsightAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_category_insight, parent, false);
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CategoryInsight item = itemInsights.get(position);
-        holder. budgetUsedView.setText(item.getBudgetUsed() + "/" +item.getTotal() + " Used");
+        String budgetUsedFormatted = String.format(Locale.getDefault(), "%.2f", item.getBudgetUsed());
+        String totalBudgetFormatted = String.format(Locale.getDefault(), "%.2f", item.getTotal());
+
+        holder.budgetUsedView.setText(budgetUsedFormatted + "/" + totalBudgetFormatted + " Used");
+
         int progress = (int) ((item.getBudgetUsed() / item.getTotal()) * 100);
+        Log.d(TAG, String.valueOf(position) + " category is " + item.getCategoryName() + " budget is " + budgetUsedFormatted);
+
+
         holder.budgetProgressBar.setProgress(progress);
-        holder.budgetLeftView.setText(((item.getTotal()) - item.getBudgetUsed()) + " Left");
+
+        // Format the budget left as a string with two decimal places
+        String budgetLeftFormatted = String.format(Locale.getDefault(), "%.2f", (item.getTotal() - item.getBudgetUsed()));
+        holder.budgetLeftView.setText(budgetLeftFormatted + " Left");
 
         switch (item.getCategoryName()) {
             case "Housing":
@@ -62,22 +84,32 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
                 holder.itemIcon.setImageResource(R.drawable.transpotation_background);
                 progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorTransportation);
                 break;
-            // Add more cases for other categories
+
+            case "Grocery":
+                holder.itemIcon.setImageResource(R.drawable.grocery_background);
+                progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorGrocery);
+                break;
+            case "Utility":
+                holder.itemIcon.setImageResource(R.drawable.utility_background);
+                progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorUtility);
+                break;
+            case "PersonalExpense":
+                holder.itemIcon.setImageResource(R.drawable.personalexpense_background);
+                progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPersonalExpense);
+                break;
+            case "Other":
+                holder.itemIcon.setImageResource(R.drawable.otherspending_background);
+                progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorOther);
+                break;
             default:
-                holder.itemIcon.setImageResource(R.drawable.otherspending_background); // Default or other category icon
-                holder.budgetProgressBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.progress_bar)); // Default progress drawable
+                holder.itemIcon.setImageResource(R.drawable.otherspending_background);
+                holder.budgetProgressBar.setProgressDrawable(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.progress_bar));
                 break;
         }
         Drawable progressDrawable = holder.budgetProgressBar.getProgressDrawable().mutate();
         progressDrawable.setColorFilter(progressColor, PorterDuff.Mode.SRC_IN);
         holder.budgetProgressBar.setProgressDrawable(progressDrawable);
 
-    }
-
-    public void updateData(List<CategoryInsight> newInsights) {
-        itemInsights.clear();
-        itemInsights.addAll(newInsights);
-        notifyDataSetChanged();
     }
 
     @Override

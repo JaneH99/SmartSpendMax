@@ -5,7 +5,6 @@ public class CategoryInsight {
     private double budgetUsed;
     private double total;
     private double budgetLeft;
-    //private List<BarEntry> charData;
 
     public CategoryInsight(String categoryName, double budgetUsed, double total, double budgetLeft) {
         this.categoryName = categoryName;
