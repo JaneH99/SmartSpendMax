@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
         android:background="@color/colorWhite"
+        app:logo="@drawable/baseline_attach_money_24"
         app:menu="@menu/toolbar_menu"
         app:titleMarginStart="30dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

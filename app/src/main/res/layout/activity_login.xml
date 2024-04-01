@@ -6,37 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
-    <View
-        android:id="@+id/background_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/selectuser_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/adsMaker_login"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="Ads Maker Login"
-        android:background="#FFFFFF"
-        android:alpha="0.8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/user_login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_weight="1"/>
-
-    <Button
-        android:id="@+id/user_login"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:text="User Login"
-        android:background="#80FF0000"
-        app:layout_constraintStart_toEndOf="@id/adsMaker_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_weight="1"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
