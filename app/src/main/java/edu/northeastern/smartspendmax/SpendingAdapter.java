@@ -24,7 +24,7 @@ import java.util.List;
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.SpendingHolder> {
 
     private List<SpendingInOneCategory> spendingInCategories;
-//    private static final int NUM_OF_CATEGORIES = 6;
+    //    private static final int NUM_OF_CATEGORIES = 6;
     private List<SpendingTransaction> list = new ArrayList<>();
     private String TAG = "------RV------";
 
