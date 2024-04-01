@@ -55,4 +55,12 @@ public class SpendingInOneCategory{
             }
         });
     }
+
+    public double getTotalAmountByCategory() {
+        double sum = 0;
+        for (SpendingTransaction transaction : this.spendingInTheCategory) {
+            sum += transaction.getAmount();
+        }
+        return sum;
+    }
 }

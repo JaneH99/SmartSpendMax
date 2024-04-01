@@ -6,6 +6,7 @@ import java.util.Date;
 public class SpendingTransaction {
 
     private LocalDate transactionDate;
+    //private Integer curMonth;
     private Category category;
     private String vendor;
     private double amount;
@@ -14,6 +15,11 @@ public class SpendingTransaction {
         this.transactionDate = transactionDate;
         this.category = category;
         this.vendor = vendor;
+        this.amount = amount;
+    }
+
+    public SpendingTransaction(Category category, double amount) {
+        this.category = category;
         this.amount = amount;
     }
 
