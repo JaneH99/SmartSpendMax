@@ -1,15 +1,12 @@
 package edu.northeastern.smartspendmax;
 
-import edu.northeastern.smartspendmax.DataFetchListener;
 
+import static android.content.Context.MODE_PRIVATE;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,15 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.MPPointF;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +30,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class InsightFragment extends Fragment {
-    private List<PieEntry> pieEntryList =new ArrayList<>();
+    private final List<PieEntry> pieEntryList =new ArrayList<>();
     private PieChart pieChart;
     private RecyclerView recyclerView;
     private CategoryInsightAdapter insightAdapter;
@@ -51,8 +44,8 @@ public class InsightFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private LocalDate date;
-    private Integer curMonth = 3;
-    private String curUserName = "user1";
+    private String curMonth;
+    private String curUserName;
     private int dataFetchCompleteCounter = 0;
     double spendingHousing = 0.0;
     double budgetHousing = 1000.0;
@@ -72,6 +65,13 @@ public class InsightFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_insight, container, false);
+
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
+        int MonthInInteger = sharedPref.getInt("LoginMonth", -1); // -1 as default value which indicates not found
+        curMonth = String.format(Locale.getDefault(), "%02d", MonthInInteger);
+        Log.d(TAG, "current Month is:" + curMonth);
+
         pieChart = view.findViewById(R.id.expenseChart);
         recyclerView = view.findViewById(R.id.insight_recyclerView);
 
@@ -110,7 +110,7 @@ public class InsightFragment extends Fragment {
                                 date = convertStringToDate(timestamp);
                                 // Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount + " on " + timestamp);
 
-                                if(timestamp.startsWith("03")){
+                                if(timestamp.startsWith(curMonth)){
                                     //Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount);
 
                                     SpendingTransaction transaction = null;

@@ -32,6 +32,7 @@ public class Login extends AppCompatActivity {
                 // Start the AdsMakerLoginActivity
                 Intent intent = new Intent(Login.this, LoginAdsMaker.class);
                 startActivity(intent);
+
             }
         });
     }

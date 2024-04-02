@@ -20,6 +20,7 @@ import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -86,14 +87,19 @@ public class LoginUser extends AppCompatActivity {
         // Update the user's login state and time
         Map<String, Object> userUpdates = new HashMap<>();
         userUpdates.put("online", true);
+        userUpdates.put("userName", userName);
         userUpdates.put("loginTime", getCurrentTime()); // Assuming you have a method to get the current time in the desired format
 
         userRef.updateChildren(userUpdates);
+
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH) + 1;
 
         // Continue with shared preferences and starting the next activity
         SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("LastLoggedInUser", userName);
+        editor.putInt("LoginMonth", month);
         editor.apply();
 
         Intent intent = new Intent(LoginUser.this, MainActivity.class);
@@ -119,9 +125,9 @@ public class LoginUser extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        disconnectCurrentUser(); // Call this method before the super method
+   @Override
+   public void onBackPressed() {
+        disconnectCurrentUser();
         super.onBackPressed();
     }
 
