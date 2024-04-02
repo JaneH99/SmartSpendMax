@@ -190,9 +190,9 @@ public class InsightFragment extends Fragment {
                     public void onCancelled(DatabaseError databaseError) {
                         Log.e("DBError", "Budget fetch cancelled", databaseError.toException());
                     }
-            });
+                });
 
-        }
+    }
 
     private void onDataFetchComplete() {
         dataFetchCompleteCounter++;
@@ -241,7 +241,7 @@ public class InsightFragment extends Fragment {
 
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
         pieDataSet.setColors(colors);
-       // pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Use predefined color template
+        // pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS); // Use predefined color template
         pieDataSet.setDrawValues(true);
         pieDataSet.setValueFormatter(new PercentFormatter(pieChart));
         pieChart.setUsePercentValues(true);
@@ -293,9 +293,6 @@ public class InsightFragment extends Fragment {
         budgetPersonalExpense = 1000.0;
         budgetOther = 1000.0;
     }
-
-
-
 
 
 }

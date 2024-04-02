@@ -125,8 +125,8 @@ public class LoginUser extends AppCompatActivity {
         }
     }
 
-   @Override
-   public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         disconnectCurrentUser();
         super.onBackPressed();
     }

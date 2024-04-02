@@ -9,14 +9,3 @@ plugins {
     id("com.google.gms.google-services") version "4.4.1" apply false
 }
 
-allprojects {
-    repositories {
-        // Keep your existing repositories
-        google()
-        mavenCentral()
-        // Add jitpack.io repository
-        maven ( url= "https://jitpack.io" )
-    }
-}
-
-
