@@ -90,6 +90,7 @@ public class NotificationActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Log.d(TAG, "onDataChange: snapshot size: " + snapshot.getChildrenCount());
                     Notification notification = snapshot.getValue(Notification.class);
+                    notification.setCouponId(couponId);
                     notificationList.add(notification);
                     Log.d(TAG, "notification: " + notification.getDiscount());
 //                    for (DataSnapshot couponSnap: snapshot.getChildren()) {

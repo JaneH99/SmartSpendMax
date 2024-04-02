@@ -17,6 +17,8 @@ public class Notification {
     private String description;
     private String validity;
 
+    private String couponId;
+
     public String getAdMakerName() {
         return adMakerName;
     }
@@ -41,5 +43,11 @@ public class Notification {
         return validity;
     }
 
+    public String getCouponId() {
+        return couponId;
+    }
 
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
 }

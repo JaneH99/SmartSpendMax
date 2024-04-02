@@ -54,6 +54,12 @@
             android:text="Validity"
             android:textSize="16sp"/>
 
+        <Button
+            android:id="@+id/btn_add_to_wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add to Wallet" />
+
     </LinearLayout>
 
 

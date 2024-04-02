@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,10 +39,20 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Log.d("NotificationAdapter", "onBindViewHolder");
         Notification notification = notificationList.get(position);
+        Log.d("NotificationAdapter", "notification: " + notification.getCouponId());
         holder.tvAdsMaker.setText(notification.getAdMakerName());
         holder.tvDiscount.setText(notification.getDiscount());
         holder.tvDescription.setText(notification.getDescription());
         holder.tvValidity.setText("Expire time:" + notification.getValidity());
+
+        holder.addToWalletBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle adding item to wallet
+                // For demonstration purposes, let's just print the item
+                System.out.println("Added item to wallet: " + notification.getCouponId());
+            }
+        });
 
 //        // Use Glide to load the image from URL into the ImageView
 //        Glide.with(context)
@@ -57,6 +68,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {
         ImageView ivAdsMakerImage;
         TextView tvAdsMaker, tvDiscount, tvDescription, tvValidity;
+        Button addToWalletBtn;
 //        ConstraintLayout constraintLayout;
 
         public NotificationViewHolder(@NonNull View itemView) {
@@ -66,6 +78,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             tvDiscount = itemView.findViewById(R.id.tv_discount);
             tvDescription = itemView.findViewById(R.id.tv_description);
             tvValidity = itemView.findViewById(R.id.tv_validity);
+            addToWalletBtn = itemView.findViewById(R.id.btn_add_to_wallet);
 //            constraintLayout = itemView.findViewById(R.id.);
         }
     }
