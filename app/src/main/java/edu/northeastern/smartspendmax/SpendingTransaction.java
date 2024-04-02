@@ -17,6 +17,11 @@ public class SpendingTransaction {
         this.amount = amount;
     }
 
+    public SpendingTransaction(Category category, double amount) {
+        this.category = category;
+        this.amount = amount;
+    }
+
     public LocalDate getTransactionDate() {
         return transactionDate;
     }
