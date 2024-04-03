@@ -45,6 +45,7 @@ public class InsightFragment extends Fragment {
     private DatabaseReference databaseReference;
     private LocalDate date;
     private String curMonth;
+    private String budgetMonthIndex;
     private String curUserName;
     private int dataFetchCompleteCounter = 0;
     double spendingHousing = 0.0;
@@ -68,8 +69,11 @@ public class InsightFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
-        int MonthInInteger = sharedPref.getInt("LoginMonth", -1); // -1 as default value which indicates not found
-        curMonth = String.format(Locale.getDefault(), "%02d", MonthInInteger);
+        int yearInInteger =  sharedPref.getInt("LoginYear", -1);
+        int monthInInteger = sharedPref.getInt("LoginMonth", -1); // -1 as default value which indicates not found
+        curMonth = String.format(Locale.getDefault(), "%02d", monthInInteger);
+        budgetMonthIndex = String.format("%d-%02d",yearInInteger , monthInInteger);
+
         Log.d(TAG, "current Month is:" + curMonth);
 
         pieChart = view.findViewById(R.id.expenseChart);
@@ -156,7 +160,8 @@ public class InsightFragment extends Fragment {
     }
 
     private void fetchBudgetData() {
-        databaseReference.child("budget").child(curUserName)
+
+        databaseReference.child("budget").child(curUserName).child(budgetMonthIndex)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
