@@ -1,7 +1,6 @@
 package edu.northeastern.smartspendmax.notification;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import edu.northeastern.smartspendmax.R;
-import edu.northeastern.smartspendmax.model.Notification;
+import edu.northeastern.smartspendmax.model.Coupon;
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>{
+public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.NotificationViewHolder>{
 
     private Context context;
-    private List<Notification> notificationList;
+    private List<Coupon> couponList;
 
-    public NotificationAdapter(Context context, List<Notification> notificationList) {
+    public CouponAdapter(Context context, List<Coupon> couponList) {
         this.context = context;
-        this.notificationList = notificationList;
+        this.couponList = couponList;
     }
 
     @NonNull
@@ -37,20 +35,18 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
-        Log.d("NotificationAdapter", "onBindViewHolder");
-        Notification notification = notificationList.get(position);
-        Log.d("NotificationAdapter", "notification: " + notification.getCouponId());
-        holder.tvAdsMaker.setText(notification.getAdMakerName());
-        holder.tvDiscount.setText(notification.getDiscount());
-        holder.tvDescription.setText(notification.getDescription());
-        holder.tvValidity.setText("Expire time:" + notification.getValidity());
+//        Log.d("NotificationAdapter", "onBindViewHolder");
+        Coupon coupon = couponList.get(position);
+//        Log.d("NotificationAdapter", "notification: " + notification.getCouponId());
+        holder.tvAdsMaker.setText(coupon.getAdMakerName());
+        holder.tvDiscount.setText(coupon.getDiscount());
+        holder.tvDescription.setText(coupon.getDescription());
+        holder.tvValidity.setText("Expire time:" + coupon.getValidity());
 
         holder.addToWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle adding item to wallet
-                // For demonstration purposes, let's just print the item
-                System.out.println("Added item to wallet: " + notification.getCouponId());
+                System.out.println("Added item to wallet: " + coupon.getCouponId());
             }
         });
 
@@ -62,7 +58,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public int getItemCount() {
-        return notificationList.size();
+        return couponList.size();
     }
 
     public static class NotificationViewHolder extends RecyclerView.ViewHolder {

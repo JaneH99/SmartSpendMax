@@ -17,14 +17,19 @@
 
     <TextView
         android:id="@+id/tv_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:text="Notification"
+        android:textStyle="bold"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="18dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@+id/btn_back_to_home"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/rv_notification"
         android:layout_marginTop="10dp"

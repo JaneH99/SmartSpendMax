@@ -1,7 +1,6 @@
 package edu.northeastern.smartspendmax.model;
 
-// TODO: rename to Coupon?
-public class Notification {
+public class Coupon {
 
 //    "discount": "10%",
 //    "discountCategory": "grocery",
