@@ -1,8 +1,12 @@
 package edu.northeastern.smartspendmax;
 
+import static com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL;
+import static com.github.mikephil.charting.components.Legend.LegendOrientation.VERTICAL;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +18,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +46,7 @@ public class HomeFragment extends Fragment {
     private View view;
 
     private PieChart overallChart;
-    private TextView tv_month;
+    private TextView tv_month, tv_rv_coupons_placeholder;
     private List<PieEntry> pieEntryList = new ArrayList<>();
     private int totalBudget;
     private int totalSpending;
@@ -65,17 +71,17 @@ public class HomeFragment extends Fragment {
 
         overallChart = view.findViewById(R.id.chart_overall);
         tv_month = view.findViewById(R.id.tv_month);
+        tv_rv_coupons_placeholder = view.findViewById(R.id.tv_rv_coupons_placeholder);
+        tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
+        getCurrentMonth();
+        tv_month.setText("Total Summary (" + currYear + "/" + String.format("%02d", currMonth) + ")");
+        Log.d(TAG, "onCreateView: currUserId = " + currUserId);
+
         // collect data
         totalBudget = 0;
         totalSpending = 0;
         db = FirebaseDatabase.getInstance();
-
-        Log.d(TAG, "onCreateView: currUserId = " + currUserId);
-        getCurrentMonth();
-        tv_month.setText("Month: " + currYear + "/" + String.format("%02d", currMonth));
-
         getTotalSpending();
-        getTotalBudget();
 
         // show coupons horizontally
         recyclerView = view.findViewById(R.id.rv_coupons);
@@ -104,7 +110,8 @@ public class HomeFragment extends Fragment {
 
     private void getTotalSpending() {
 //        db.getReference("spendings").child(currUserId).orderByChild("/timestamp").startAt("03").endAt("2024").addListenerForSingleValueEvent(
-        db.getReference("spendings").child(currUserId).orderByChild("timestamp").startAt(firstDayOfMonth).endAt(lastDayOfMonth + "\uf8ff").addListenerForSingleValueEvent(
+        db.getReference("spendings").child(currUserId).orderByChild("timestamp").startAt(firstDayOfMonth).endAt(lastDayOfMonth + "\uf8ff")
+                .addListenerForSingleValueEvent(
                 new ValueEventListener() {
 
                     @Override
@@ -114,7 +121,9 @@ public class HomeFragment extends Fragment {
                             SpendingRecord record = entry.getValue(SpendingRecord.class);
                             System.out.println("record.amount = " + record.getAmount());
                             totalSpending += record.getAmount().intValue();
+
                         }
+                        getTotalBudget();
                     }
 
                     @Override
@@ -165,8 +174,8 @@ public class HomeFragment extends Fragment {
         pieEntryList.add(new PieEntry(totalBudget - totalSpending, "Remaining Budget"));
 
         ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.colorPrimaryLight));
         colors.add(getResources().getColor(R.color.colorPrimary));
+        colors.add(getResources().getColor(R.color.colorPrimaryLight));
 
         pieDataSet.setColors(colors);
 
@@ -180,10 +189,14 @@ public class HomeFragment extends Fragment {
         overallChart.setData(pieData);
         overallChart.setDrawEntryLabels(false);
         overallChart.setExtraOffsets(8, 8, 8, 8);
-        overallChart.getLegend().setEnabled(false);
+        Legend legend = overallChart.getLegend();
+        legend.setEnabled(true);
+        legend.setOrientation(HORIZONTAL);
+        legend.setXOffset(120f);
+        legend.setYOffset(0f);
         overallChart.getDescription().setEnabled(false);
-        overallChart.setCenterText("Total Expenses: " + totalSpending +
-                "\n" + "Total Budget: " + totalBudget);
+        overallChart.setCenterText("Expenses: " + totalSpending +
+                "\n" + "Budget: " + totalBudget);
         overallChart.setCenterTextSize(18f);
         overallChart.invalidate();
     }
@@ -215,7 +228,11 @@ public class HomeFragment extends Fragment {
                         uncollectedCouponIds.add(c);
                     }
                 }
-                getCouponDetails();
+                if (uncollectedCouponIds.size() == 0) {
+                    tv_rv_coupons_placeholder.setVisibility(View.VISIBLE);
+                } else {
+                    getCouponDetails();
+                }
             }
 
             @Override
@@ -235,7 +252,7 @@ public class HomeFragment extends Fragment {
                     Coupon coupon = snapshot.getValue(Coupon.class);
                     coupon.setCouponId(couponId);
                     uncollectedCouponDetails.add(coupon);
-                    CouponAdapter adapter = new CouponAdapter(view.getContext(), uncollectedCouponDetails);
+                    CouponAdapter adapter = new CouponAdapter(view.getContext(), uncollectedCouponDetails, currUserId);
                     Log.d(TAG, "uncollectedCouponDetails size: " + uncollectedCouponDetails.size());
                     recyclerView.setAdapter(adapter);
                 }

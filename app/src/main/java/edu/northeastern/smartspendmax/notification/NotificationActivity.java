@@ -42,12 +42,7 @@ public class NotificationActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         db = FirebaseDatabase.getInstance();
-
-//        getCouponIDList();
-
         getReceivedCoupons();
-        Log.d(TAG, "after getCouponIDList ");
-
     }
 
     // get couponID list ===== old version ==== get receivedCoupon from "ads" node
@@ -100,18 +95,10 @@ public class NotificationActivity extends AppCompatActivity {
             db.getReference("coupons").child(couponId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    Log.d(TAG, "onDataChange: snapshot size: " + snapshot.getChildrenCount());
                     Coupon coupon = snapshot.getValue(Coupon.class);
                     coupon.setCouponId(couponId);
                     couponList.add(coupon);
-//                    Log.d(TAG, "notification: " + notification.getDiscount());
-//                    for (DataSnapshot couponSnap: snapshot.getChildren()) {
-//                        String discount = snapshot.child("discount").getValue(String.class);
-//                        Log.d(TAG, "onDataChange: discount: " + discount);
-////                        Notification notification = couponSnap.getValue(Notification.class);
-////                        Log.d(TAG, "onDataChange: " + notification.getDiscount());
-//                    }
-                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList);
+                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
                     Log.d(TAG, "getCouponContentList: notificationList size: " + couponList.size());
                     recyclerView.setAdapter(adapter);
                 }
