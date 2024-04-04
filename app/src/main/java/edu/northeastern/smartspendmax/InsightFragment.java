@@ -4,6 +4,7 @@ package edu.northeastern.smartspendmax;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +47,7 @@ public class InsightFragment extends Fragment {
     private DatabaseReference databaseReference;
     private LocalDate date;
     private String curMonth;
+    private String budgetMonthIndex;
     private String curUserName;
     private int dataFetchCompleteCounter = 0;
     double spendingHousing = 0.0;
@@ -68,8 +71,11 @@ public class InsightFragment extends Fragment {
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
-        int MonthInInteger = sharedPref.getInt("LoginMonth", -1); // -1 as default value which indicates not found
-        curMonth = String.format(Locale.getDefault(), "%02d", MonthInInteger);
+        int yearInInteger =  sharedPref.getInt("LoginYear", -1);
+        int monthInInteger = sharedPref.getInt("LoginMonth", -1); // -1 as default value which indicates not found
+        curMonth = String.format(Locale.getDefault(), "%02d", monthInInteger);
+        budgetMonthIndex = String.format("%d-%02d",yearInInteger , monthInInteger);
+
         Log.d(TAG, "current Month is:" + curMonth);
 
         pieChart = view.findViewById(R.id.expenseChart);
@@ -156,7 +162,8 @@ public class InsightFragment extends Fragment {
     }
 
     private void fetchBudgetData() {
-        databaseReference.child("budget").child(curUserName)
+
+        databaseReference.child("budget").child(curUserName).child(budgetMonthIndex)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -218,26 +225,35 @@ public class InsightFragment extends Fragment {
     private void setupPieChart() {
         List<PieEntry> pieEntries = new ArrayList<>();
 
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(getResources().getColor(R.color.colorHousing));
-        colors.add(getResources().getColor(R.color.colorTransportation));
-        colors.add(getResources().getColor(R.color.colorGrocery));
-        colors.add(getResources().getColor(R.color.colorUtility));
-        colors.add(getResources().getColor(R.color.colorPersonalExpense));
-        colors.add(getResources().getColor(R.color.colorOther));
-
-
-
         double totalSpending = spendingHousing + spendingTransportation + spendingUtilities +
                 spendingGrocery + spendingPersonalExpense + spendingOther;
 
-        // Only add entries for categories with spending
-        if (spendingHousing > 0) pieEntries.add(new PieEntry((float) spendingHousing, "Housing"));
-        if (spendingTransportation > 0) pieEntries.add(new PieEntry((float) spendingTransportation, "Transportation"));
-        if (spendingUtilities > 0) pieEntries.add(new PieEntry((float) spendingUtilities, "Utilities"));
-        if (spendingGrocery > 0) pieEntries.add(new PieEntry((float) spendingGrocery, "Grocery"));
-        if (spendingPersonalExpense > 0) pieEntries.add(new PieEntry((float) spendingPersonalExpense, "PersonalExpense"));
-        if (spendingOther > 0) pieEntries.add(new PieEntry((float) spendingOther, "Other"));
+        if(totalSpending > 0 ){
+
+//        categoryColors.add(getResources().getColor(R.color.colorPersonalExpense));
+//        categoryColors.add(getResources().getColor(R.color.colorOther));
+
+        ArrayList<Integer> colors = new ArrayList<>();
+
+        if (spendingHousing > 0) {
+            pieEntries.add(new PieEntry((float) spendingHousing, "Housing"));
+            colors.add(getResources().getColor(R.color.colorHousing));
+        } if (spendingTransportation > 0) {
+            pieEntries.add(new PieEntry((float) spendingTransportation, "Transportation"));
+            colors.add(getResources().getColor(R.color.colorTransportation));
+        } if (spendingGrocery > 0) {
+            pieEntries.add(new PieEntry((float) spendingGrocery, "Grocery"));
+            colors.add(getResources().getColor(R.color.colorGrocery));
+        }if (spendingUtilities > 0) {
+                pieEntries.add(new PieEntry((float) spendingUtilities, "Utilities"));
+                colors.add(getResources().getColor(R.color.colorUtility));
+        }if (spendingPersonalExpense > 0) {
+            pieEntries.add(new PieEntry((float) spendingPersonalExpense, "PersonalExpense"));
+            colors.add(getResources().getColor(R.color.colorPersonalExpense));
+        }if (spendingOther > 0) {
+            pieEntries.add(new PieEntry((float) spendingOther, "Other"));
+            colors.add(getResources().getColor(R.color.colorOther));
+        }
 
         PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
         pieDataSet.setColors(colors);
@@ -260,7 +276,30 @@ public class InsightFragment extends Fragment {
         pieChart.invalidate();
 
         pieDataSet.setValueTextColor(getResources().getColor(R.color.colorWhite));
-        pieDataSet.setValueTextSize(16f);
+        pieDataSet.setValueTextSize(12f);
+        }else{
+            pieEntries.add(new PieEntry(1, ""));
+
+            // Define a gray color for the placeholder
+            ArrayList<Integer> colors = new ArrayList<>();
+            colors.add(getResources().getColor(R.color.colorGrey));
+
+            PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+            pieDataSet.setColors(colors);
+            pieDataSet.setDrawValues(true);
+
+            PieData pieData = new PieData(pieDataSet);
+            pieChart.setData(pieData);
+
+            pieChart.getDescription().setEnabled(false);
+            pieChart.setDrawEntryLabels(false);
+            pieChart.getLegend().setEnabled(false);
+            pieChart.setCenterText("Oops!\n" + "No spending recorded.\n" +"Tap Spending on bottom to add an expense.");
+            pieChart.setCenterTextColor(Color.parseColor("#303A56"));
+
+            pieChart.invalidate();
+        }
+
     }
 
     private void setupRecyclerView() {
