@@ -40,6 +40,7 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
         ProgressBar budgetProgressBar;
         TextView budgetLeftView;
         ImageView itemIcon;
+        ImageView warningDot;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -47,6 +48,7 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
             budgetProgressBar = itemView.findViewById(R.id.category_progress_bar);
             budgetLeftView = itemView.findViewById(R.id.item_text_right);
             itemIcon = itemView.findViewById(R.id.item_icon);
+            warningDot = itemView.findViewById(R.id.warning_dot);
         }
     }
 
@@ -63,17 +65,33 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
         String budgetUsedFormatted = String.format(Locale.getDefault(), "%.2f", item.getBudgetUsed());
         String totalBudgetFormatted = String.format(Locale.getDefault(), "%.2f", item.getTotal());
 
-        holder.budgetUsedView.setText(budgetUsedFormatted + "/" + totalBudgetFormatted + " Used");
+
 
         int progress = (int) ((item.getBudgetUsed() / item.getTotal()) * 100);
         Log.d(TAG, String.valueOf(position) + " category is " + item.getCategoryName() + " budget is " + budgetUsedFormatted);
-
+        holder.budgetUsedView.setText(budgetUsedFormatted + "/" + totalBudgetFormatted + " Used");
 
         holder.budgetProgressBar.setProgress(progress);
 
-        // Format the budget left as a string with two decimal places
-        String budgetLeftFormatted = String.format(Locale.getDefault(), "%.2f", (item.getTotal() - item.getBudgetUsed()));
-        holder.budgetLeftView.setText(budgetLeftFormatted + " Left");
+        if (item.getBudgetUsed() > item.getTotal()) {
+            // Display warning dot
+            holder.warningDot.setVisibility(View.VISIBLE);
+
+            // Change text to red
+            holder.budgetUsedView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorAccent));
+            holder.budgetLeftView.setText("Over Budget");
+            holder.budgetLeftView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorAccent));
+        } else {
+            // Hide warning dot
+            holder.warningDot.setVisibility(View.INVISIBLE);
+            String budgetLeftFormatted = String.format(Locale.getDefault(), "%.2f", (item.getTotal() - item.getBudgetUsed()));
+            holder.budgetLeftView.setText(budgetLeftFormatted + " Left");
+
+            // Reset text color if needed
+            holder.budgetUsedView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimaryDark));
+            holder.budgetLeftView.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.colorPrimaryDark));
+        }
+
 
         switch (item.getCategoryName()) {
             case "Housing":
@@ -84,7 +102,6 @@ public class CategoryInsightAdapter extends RecyclerView.Adapter<CategoryInsight
                 holder.itemIcon.setImageResource(R.drawable.transpotation_background);
                 progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorTransportation);
                 break;
-
             case "Grocery":
                 holder.itemIcon.setImageResource(R.drawable.grocery_background);
                 progressColor = ContextCompat.getColor(holder.itemView.getContext(), R.color.colorGrocery);
