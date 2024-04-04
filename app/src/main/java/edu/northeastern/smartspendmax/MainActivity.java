@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import edu.northeastern.smartspendmax.notification.NotificationActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "User Log Out", Toast.LENGTH_SHORT).show();
         } else if(itemID == R.id.notification) {
             Toast.makeText(this, "Notification Selected", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            startActivity(intent);
         }
         return true;
     }

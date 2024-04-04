@@ -1,15 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
     <TextView
-        android:id="@+id/homeText"
+        android:id="@+id/tv_month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home Fragment"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginStart="10dp"
+        android:text="Total Summary ()"
         android:textSize="25dp"
-        android:layout_centerInParent="true"/>
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"/>
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart_overall"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginTop="2dp"
+        android:layout_below="@id/tv_month" />
+
+    <TextView
+        android:id="@+id/tv_rv_coupons_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uncollected Coupons"
+        android:layout_below="@+id/chart_overall"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/tv_rv_coupons_placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have collected all coupons."
+        android:layout_below="@+id/chart_overall"
+        android:layout_marginTop="100dp"
+        android:textSize="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_coupons"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/tv_rv_coupons_label"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
