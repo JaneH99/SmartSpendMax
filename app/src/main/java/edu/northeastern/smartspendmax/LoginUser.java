@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +20,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import edu.northeastern.smartspendmax.util.CommonConstants;
 
 public class LoginUser extends AppCompatActivity {
 
@@ -32,6 +37,7 @@ public class LoginUser extends AppCompatActivity {
     Button userLoginButton;
     FirebaseDatabase database;
     DatabaseReference reference;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,7 @@ public class LoginUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = username.getText().toString().trim();
+                name = username.getText().toString().trim();
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
 
@@ -102,6 +108,8 @@ public class LoginUser extends AppCompatActivity {
         editor.putInt("LoginMonth", month);
         editor.apply();
 
+        setupDefaultBudget();
+
         Intent intent = new Intent(LoginUser.this, MainActivity.class);
         intent.putExtra("userName", userName);
         startActivity(intent);
@@ -129,6 +137,33 @@ public class LoginUser extends AppCompatActivity {
     public void onBackPressed() {
         disconnectCurrentUser();
         super.onBackPressed();
+    }
+
+    private void setupDefaultBudget() {
+        // Define the date format
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        // Format the current date as 'yyyy-MM'
+        String formattedDate = LocalDate.now().format(formatter);
+        System.out.println("formattedDate: " + formattedDate);
+        database.getReference("budget/" + name + "/" + formattedDate).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Log.d("LoginUser", name + " has a budget for " + formattedDate);
+                } else {
+                    // User does not exist
+                    Log.d("LoginUser", name + " doesn't have a budget for " + formattedDate);
+                    database.getReference("budget/" + name + "/" + formattedDate).setValue(CommonConstants.defaultBudget);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle errors
+                System.out.println("Failed to check user existence: " + databaseError.getMessage());
+            }
+        });
     }
 
 

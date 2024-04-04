@@ -2,7 +2,7 @@ package edu.northeastern.smartspendmax.model;
 
 public class Budget {
 
-// "housing": "2000",
+    // "housing": "2000",
 // "transportation": "500",
 // "grocery": "1000",
 // "utilities": "1000",
@@ -14,6 +14,20 @@ public class Budget {
     private Integer utilities;
     private Integer personalExpense;
     private Integer other;
+
+    public Budget() {
+    }
+
+    public Budget(Integer housing, Integer transportation,
+                  Integer grocery, Integer utilities,
+                  Integer personalExpense, Integer other) {
+        this.housing = housing;
+        this.transportation = transportation;
+        this.grocery = grocery;
+        this.utilities = utilities;
+        this.personalExpense = personalExpense;
+        this.other = other;
+    }
 
     public Integer getHousing() {
         return housing;

@@ -1,8 +1,10 @@
 package edu.northeastern.smartspendmax;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL;
 import static com.github.mikephil.charting.components.Legend.LegendOrientation.VERTICAL;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,7 +53,7 @@ public class HomeFragment extends Fragment {
     private int totalBudget;
     private int totalSpending;
     private FirebaseDatabase db;
-    private String currUserId = "user1";
+    private String currUserId = "";
 
     private int currMonth;
     private int currYear;
@@ -75,7 +77,10 @@ public class HomeFragment extends Fragment {
         tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
         getCurrentMonth();
         tv_month.setText("Total Summary (" + currYear + "/" + String.format("%02d", currMonth) + ")");
-        Log.d(TAG, "onCreateView: currUserId = " + currUserId);
+
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        currUserId = sharedPref.getString("LastLoggedInUser", "defaultUser");
+        Log.d(TAG, "currUserId = " + currUserId);
 
         // collect data
         totalBudget = 0;

@@ -1,5 +1,6 @@
 package edu.northeastern.smartspendmax.notification;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -40,6 +41,10 @@ public class NotificationActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_notification);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        currUserId = sharedPref.getString("LastLoggedInUser", "defaultUser");
+        Log.d(TAG, "currUserId = " + currUserId);
 
         db = FirebaseDatabase.getInstance();
         getReceivedCoupons();
