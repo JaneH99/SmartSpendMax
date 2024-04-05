@@ -7,25 +7,40 @@
     tools:context=".adsMaker.AddNewCoupon">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/coupon_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="Spending"
-        app:titleTextColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/transactionInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:title="Coupon"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tv_coupon_page_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/coupon_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/cv_coupon_input"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:text="Create a new coupon"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22dp"
+        android:textStyle="bold"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_coupon_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -33,104 +48,110 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/transactionCategoryText"
+                android:id="@+id/tv_discount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Category:"
+                android:layout_marginTop="12dp"
+                android:text="Discount:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:layout_marginTop="12dp"/>
+                android:textSize="16sp" />
 
             <Spinner
-                android:id="@+id/spinnerTransactionCategory"
+                android:id="@+id/spinner_discount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="100dp"
-                android:minHeight="48dp"
-                android:layout_toRightOf="@+id/transactionCategoryText"
-                android:layout_alignParentStart="true"/>
+                android:layout_toRightOf="@+id/tv_discount"
+                android:minHeight="48dp" />
 
             <TextView
-                android:id="@+id/transactionDateText"
+                android:id="@+id/tv_discount_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/tv_discount"
+                android:layout_marginTop="24dp"
                 android:text="Date:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:layout_below="@id/transactionCategoryText"
-                android:layout_marginTop="24dp"/>
+                android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/transactionDate"
+            <Spinner
+                android:id="@+id/spinner_discount_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinnerTransactionCategory"
-                android:layout_toRightOf="@id/transactionDateText"
+                android:layout_below="@+id/spinner_discount"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="100dp"
-                android:hint="2024/03/13"
-                android:inputType="date"
-                android:layout_alignParentStart="true" />
+                android:layout_toRightOf="@+id/tv_discount_category"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_discount_category"
+                android:layout_marginTop="35dp"
+                android:text="Description:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <ScrollView
+                android:id="@+id/sv_description"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@id/spinner_discount_category"
+                android:layout_toRightOf="@id/tv_description">
+
+                <EditText
+                    android:id="@+id/et_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
+                    android:hint="eg., Get 25% off your next purchase with code SAVE25!"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:scrollbars="vertical" />
+            </ScrollView>
+
+            <TextView
+                android:id="@+id/tv_validity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_description"
+                android:layout_marginTop="35dp"
+                android:text="Expire time:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/ev_validity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sv_description"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="100dp"
+                android:layout_toRightOf="@id/tv_validity"
+                android:hint="eg., 2024-04-14"
+                android:inputType="numberDecimal" />
 
             <ImageButton
                 android:id="@+id/calendarButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_calendar_month_24"
-                android:layout_below="@+id/spinnerTransactionCategory"
-                android:layout_toRightOf="@+id/transactionDate"
-                android:contentDescription="Calendar Icon" />
-
-
-            <TextView
-                android:id="@+id/transactionVendorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vendor:"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:layout_below="@id/transactionDateText"
-                android:layout_marginTop="24dp"/>
-
-            <EditText
-                android:id="@+id/transactionVendor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/transactionDate"
-                android:layout_toRightOf="@id/transactionVendorText"
-                android:layout_marginStart="100dp"
-                android:inputType="text"
-                android:layout_alignParentStart="true"
-                android:hint="eg., Costco"/>
-
-            <TextView
-                android:id="@+id/transactionAmountText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amount:"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:layout_below="@id/transactionVendorText"
-                android:layout_marginTop="24dp"/>
-
-            <EditText
-                android:id="@+id/transactionAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/transactionVendor"
-                android:layout_toRightOf="@id/transactionAmountText"
-                android:layout_marginStart="100dp"
-                android:inputType="numberDecimal"
-                android:layout_alignParentStart="true"
-                android:hint="eg., 99.99"/>
+                android:layout_below="@+id/sv_description"
+                android:layout_toRightOf="@+id/ev_validity"
+                android:contentDescription="Calendar Icon"
+                android:src="@drawable/baseline_calendar_month_24" />
 
             <Button
                 android:id="@+id/transactionSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SAVE"
-                android:layout_below="@id/transactionAmountText"
+                android:layout_below="@id/tv_validity"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"
+                android:text="SAVE" />
 
         </RelativeLayout>
 
