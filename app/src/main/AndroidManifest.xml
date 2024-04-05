@@ -39,7 +39,10 @@
         </activity>
         <activity
             android:name=".notification.NotificationActivity"
-            android:exported="false" />
+            android:exported="true" />
+        <activity
+            android:name=".adsMaker.AddNewCoupon"
+            android:exported="true" />
     </application>
 
 </manifest>

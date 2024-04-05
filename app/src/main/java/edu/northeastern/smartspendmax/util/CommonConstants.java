@@ -16,5 +16,10 @@ public class CommonConstants {
     public final static String NODE_SPENDINGS = "spendings";
     public final static String NODE_USER_COUPON = "user-coupon";
     public final static String NODE_USERS = "users";
+    public final static String ROLE = "role";
+
+    public final static String ROLE_USER = "user";
+    public final static String ROLE_ADS_MAKER = "adsMaker";
+
 
 }

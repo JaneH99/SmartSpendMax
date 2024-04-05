@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".adsMaker.AddNewCoupon">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Spending"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/transactionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/transactionCategoryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="12dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerTransactionCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:minHeight="48dp"
+                android:layout_toRightOf="@+id/transactionCategoryText"
+                android:layout_alignParentStart="true"/>
+
+            <TextView
+                android:id="@+id/transactionDateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_below="@id/transactionCategoryText"
+                android:layout_marginTop="24dp"/>
+
+            <EditText
+                android:id="@+id/transactionDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinnerTransactionCategory"
+                android:layout_toRightOf="@id/transactionDateText"
+                android:layout_marginStart="100dp"
+                android:hint="2024/03/13"
+                android:inputType="date"
+                android:layout_alignParentStart="true" />
+
+            <ImageButton
+                android:id="@+id/calendarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_calendar_month_24"
+                android:layout_below="@+id/spinnerTransactionCategory"
+                android:layout_toRightOf="@+id/transactionDate"
+                android:contentDescription="Calendar Icon" />
+
+
+            <TextView
+                android:id="@+id/transactionVendorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vendor:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_below="@id/transactionDateText"
+                android:layout_marginTop="24dp"/>
+
+            <EditText
+                android:id="@+id/transactionVendor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transactionDate"
+                android:layout_toRightOf="@id/transactionVendorText"
+                android:layout_marginStart="100dp"
+                android:inputType="text"
+                android:layout_alignParentStart="true"
+                android:hint="eg., Costco"/>
+
+            <TextView
+                android:id="@+id/transactionAmountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Amount:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_below="@id/transactionVendorText"
+                android:layout_marginTop="24dp"/>
+
+            <EditText
+                android:id="@+id/transactionAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transactionVendor"
+                android:layout_toRightOf="@id/transactionAmountText"
+                android:layout_marginStart="100dp"
+                android:inputType="numberDecimal"
+                android:layout_alignParentStart="true"
+                android:hint="eg., 99.99"/>
+
+            <Button
+                android:id="@+id/transactionSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:layout_below="@id/transactionAmountText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp" />
+
+        </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
