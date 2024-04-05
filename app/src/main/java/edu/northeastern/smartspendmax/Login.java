@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import edu.northeastern.smartspendmax.util.CommonConstants;
+
 public class Login extends AppCompatActivity {
 
     @Override
@@ -22,6 +24,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 // Start the UserLoginActivity
                 Intent intent = new Intent(Login.this, LoginUser.class);
+                intent.putExtra(CommonConstants.ROLE, CommonConstants.ROLE_USER);
                 startActivity(intent);
             }
         });
@@ -30,7 +33,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Start the AdsMakerLoginActivity
-                Intent intent = new Intent(Login.this, LoginAdsMaker.class);
+                Intent intent = new Intent(Login.this, LoginUser.class);
+                intent.putExtra(CommonConstants.ROLE, CommonConstants.ROLE_ADS_MAKER);
                 startActivity(intent);
 
             }

@@ -17,11 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.auth.User;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +27,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import edu.northeastern.smartspendmax.adsMaker.AddNewCoupon;
 import edu.northeastern.smartspendmax.util.CommonConstants;
 
 public class LoginUser extends AppCompatActivity {
@@ -38,14 +37,29 @@ public class LoginUser extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference reference;
     String name;
+    String userRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_user);
 
-        username = findViewById(R.id.editTextUserName);
-        userLoginButton = findViewById(R.id.buttonUserLogin);
+        Intent intent = getIntent();
+        if(intent.hasExtra(CommonConstants.ROLE)) {
+            userRole = intent.getStringExtra(CommonConstants.ROLE);
+            Log.d("LoginUser", "Received userRole: " + userRole);
+        } else {
+            Log.d("LoginUser", "No userRole extra found in Intent");
+        }
+
+        if (userRole.equals(CommonConstants.ROLE_USER)) {
+            setContentView(R.layout.activity_login_user);
+            username = findViewById(R.id.editTextUserName);
+            userLoginButton = findViewById(R.id.buttonUserLogin);
+        } else {
+            setContentView(R.layout.activity_login_ads_maker);
+            username = findViewById(R.id.editTextAdsMakerName);
+            userLoginButton = findViewById(R.id.buttonAdsMakerLogin);
+        }
 
         userLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,13 +80,15 @@ public class LoginUser extends AppCompatActivity {
                 reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            proceedToNextActivity(name);
-                        } else{
-                            reference.child(name).setValue(new Users(name, true, getCurrentTime()));
-                            proceedToNextActivity(name);
+                        if(!snapshot.exists()){
+                            reference.child(name).setValue(new Users(name, true, getCurrentTime(), userRole));
                         }
-
+                        proceedToNextActivity(name);
+                        if (userRole.equals(CommonConstants.ROLE_USER)) {
+                            toUserHomepage();
+                        } else {
+                            toAdsMakerHomepage();
+                        }
                     }
 
                     @Override
@@ -109,12 +125,6 @@ public class LoginUser extends AppCompatActivity {
         editor.putInt("LoginMonth", month);
         editor.putInt("LoginYear", year);
         editor.apply();
-
-        setupDefaultBudget();
-
-        Intent intent = new Intent(LoginUser.this, MainActivity.class);
-        intent.putExtra("userName", userName);
-        startActivity(intent);
     }
 
     private String getCurrentTime() {
@@ -166,6 +176,20 @@ public class LoginUser extends AppCompatActivity {
                 System.out.println("Failed to check user existence: " + databaseError.getMessage());
             }
         });
+    }
+
+    private void toUserHomepage() {
+        setupDefaultBudget();
+
+        Intent intent = new Intent(LoginUser.this, MainActivity.class);
+        intent.putExtra("userName", name);
+        startActivity(intent);
+    }
+
+    private void toAdsMakerHomepage() {
+        Intent intent = new Intent(LoginUser.this, AddNewCoupon.class);
+        intent.putExtra("userName", name);
+        startActivity(intent);
     }
 
 
