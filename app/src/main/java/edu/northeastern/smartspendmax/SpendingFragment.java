@@ -1,6 +1,9 @@
 package edu.northeastern.smartspendmax;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,7 +48,10 @@ public class SpendingFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         database = FirebaseDatabase.getInstance();
-        curUserName = "user1";
+
+        //retrieve current user
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
         consolidateData();
 
         //Floating Button
