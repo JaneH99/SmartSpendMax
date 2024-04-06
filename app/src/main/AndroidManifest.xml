@@ -25,10 +25,10 @@
             android:exported="true" />
         <activity
             android:name=".LoginUser"
-            android:exported="true" /> <!-- Main Activity Declaration (Now without the MAIN and LAUNCHER intent filter) -->
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" /> <!-- Login Activity Declaration -->
+            android:exported="true" />
         <activity
             android:name=".Login"
             android:exported="true">

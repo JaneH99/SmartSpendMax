@@ -66,10 +66,6 @@ public class InsightFragment extends Fragment {
     private FloatingActionButton fab;
     private String TAG = "--------INSIGHT FRAG------";
 
-    public InsightFragment(){
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
