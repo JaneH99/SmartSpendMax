@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,9 @@ public class AddNewTransaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_transaction);
 
+        //retrieve current user
+        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
 
         spinner = findViewById(R.id.spinnerTransactionCategory);
         transactionDate = findViewById(R.id.transactionDate);
@@ -89,7 +93,6 @@ public class AddNewTransaction extends AppCompatActivity {
             public void onClick(View v) {
                 if(validateInput()) {
                     saveDataToDB();
-                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please verify your input", Toast.LENGTH_LONG).show();
                 };
@@ -99,8 +102,6 @@ public class AddNewTransaction extends AppCompatActivity {
     }
 
     private void saveDataToDB() {
-        //hard code now. Need to modify later
-        curUserName = "user1";
 
         String category = spinner.getSelectedItem().toString().toLowerCase();
         String date = transactionDate.getText().toString();
@@ -122,6 +123,7 @@ public class AddNewTransaction extends AppCompatActivity {
                     .addOnFailureListener(
                             e -> Toast.makeText(getApplicationContext(), "Failed to save the transaction", Toast.LENGTH_SHORT).show());
         }
+        finish();
     }
 
     //Check if user input all data regarding a transaction
