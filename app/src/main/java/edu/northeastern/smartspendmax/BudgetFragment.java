@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class BudgetFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
-
-    public BudgetFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -46,7 +46,6 @@ public class InsightFragment extends Fragment {
     private List<CategoryInsight> categoryInsightsList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-    private OnFragmentInteractionListener mListener;
     private LocalDate date;
     private String curMonth;
     private String budgetMonthIndex;

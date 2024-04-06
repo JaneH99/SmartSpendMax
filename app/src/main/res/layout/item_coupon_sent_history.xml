@@ -44,7 +44,7 @@
         android:layout_height="78dp"
         android:layout_gravity="center"
         android:layout_weight="0.27"
-        android:padding="2dp"
+        android:layout_marginLeft="4dp"
         android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
