@@ -93,7 +93,6 @@ public class AddNewTransaction extends AppCompatActivity {
             public void onClick(View v) {
                 if(validateInput()) {
                     saveDataToDB();
-                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please verify your input", Toast.LENGTH_LONG).show();
                 };
@@ -124,6 +123,7 @@ public class AddNewTransaction extends AppCompatActivity {
                     .addOnFailureListener(
                             e -> Toast.makeText(getApplicationContext(), "Failed to save the transaction", Toast.LENGTH_SHORT).show());
         }
+        finish();
     }
 
     //Check if user input all data regarding a transaction
