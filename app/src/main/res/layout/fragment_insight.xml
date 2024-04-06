@@ -47,7 +47,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="6dp"
         android:src="@drawable/baseline_edit_24"
-        app:backgroundTint="@color/colorPrimaryLight" />
+        app:backgroundTint="@color/colorPrimary" />
 
 
 </RelativeLayout>

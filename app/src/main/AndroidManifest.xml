@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartSpendMax"
         tools:targetApi="31">
+
+        <activity
+            android:name=".CouponSentHistory"
+            android:exported="false" />
         <activity
             android:name=".LoginAdsMaker"
             android:exported="true" />
@@ -20,16 +24,12 @@
             android:exported="true" />
         <activity
             android:name=".LoginUser"
-            android:exported="true" />
-
-        <!-- Main Activity Declaration (Now without the MAIN and LAUNCHER intent filter) -->
+            android:exported="true" /> <!-- Main Activity Declaration (Now without the MAIN and LAUNCHER intent filter) -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
-
-        <!-- Login Activity Declaration -->
-        <activity android:name=".Login"
+            android:exported="true" /> <!-- Login Activity Declaration -->
+        <activity
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

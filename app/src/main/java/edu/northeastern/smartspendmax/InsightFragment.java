@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,24 +46,30 @@ public class InsightFragment extends Fragment {
     private List<CategoryInsight> categoryInsightsList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private OnFragmentInteractionListener mListener;
     private LocalDate date;
     private String curMonth;
     private String budgetMonthIndex;
     private String curUserName;
     private int dataFetchCompleteCounter = 0;
     double spendingHousing = 0.0;
-    double budgetHousing = 1000.0;
     double spendingTransportation = 0.0;
-    double budgetTransportation = 1000.0;
     double spendingUtilities = 0.0;
-    double budgetUtilities = 1000.0;
     double spendingGrocery = 0.0;
-    double budgetGrocery = 1000.0;
     double spendingPersonalExpense = 0.0;
-    double budgetPersonalExpense = 1000.0;
     double spendingOther = 0.0;
-    double budgetOther = 1000.0;
+    double budgetHousing;
+    double budgetUtilities;
+    double budgetTransportation;
+    double budgetGrocery;
+    double budgetPersonalExpense;
+    double budgetOther;
+    private FloatingActionButton fab;
     private String TAG = "--------INSIGHT FRAG------";
+
+    public InsightFragment(){
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,17 +90,28 @@ public class InsightFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Initialize InsightDatabaseHandler and fetch data
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
-        //InsightDatabaseHandler databaseHandler = new InsightDatabaseHandler(databaseReference, new ArrayList<>(),
-        //        insightAdapter, curMonth, curUser, this);
 
         //databaseHandler.fetchBudgetAndSpending();
         fetchSpendingData();
         fetchBudgetData();
         onDataFetchComplete();
 
+        //Floating Button
+        fab = view.findViewById(R.id.edit_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Replace the current fragment with BudgetFragment
+                if(getActivity() != null) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new BudgetFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
         return view;
     }
 

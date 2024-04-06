@@ -10,33 +10,22 @@
         android:id="@+id/coupon_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimaryDark"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="Coupon"
+        app:title="New Coupon"
         app:titleTextColor="@android:color/white" />
-
-    <TextView
-        android:id="@+id/tv_coupon_page_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/coupon_toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cv_coupon_input"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:text="Create a new coupon"
-        android:textColor="@color/colorPrimary"
-        android:textSize="22dp"
-        android:textStyle="bold"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_coupon_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="250dp"
-        android:layout_marginEnd="20dp"
-        app:cardCornerRadius="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="15dp"
+        app:cardCornerRadius="24dp"
+        app:elevation="20dp"
+        app:cardBackgroundColor="#F8F8FA"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +43,8 @@
                 android:layout_marginTop="12dp"
                 android:text="Discount:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_discount"
@@ -73,7 +63,8 @@
                 android:layout_marginTop="24dp"
                 android:text="Date:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spinner_discount_category"
@@ -93,7 +84,8 @@
                 android:layout_marginTop="35dp"
                 android:text="Description:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <ScrollView
                 android:id="@+id/sv_description"
@@ -122,7 +114,8 @@
                 android:layout_marginTop="35dp"
                 android:text="Expire time:"
                 android:textColor="@android:color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/ev_validity"
@@ -151,6 +144,7 @@
                 android:layout_below="@id/tv_validity"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:text="SAVE" />
 
         </RelativeLayout>
