@@ -48,30 +48,11 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/tv_discount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Discount:"
-                android:textColor="@android:color/black"
-                android:textSize="16sp" />
-
-            <Spinner
-                android:id="@+id/spinner_discount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="100dp"
-                android:layout_toRightOf="@+id/tv_discount"
-                android:minHeight="48dp" />
-
-            <TextView
                 android:id="@+id/tv_discount_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_discount"
-                android:layout_marginTop="24dp"
-                android:text="Date:"
+                android:layout_marginTop="10dp"
+                android:text="Discount \nCategory"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
@@ -79,17 +60,37 @@
                 android:id="@+id/spinner_discount_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner_discount"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="100dp"
                 android:layout_toRightOf="@+id/tv_discount_category"
                 android:minHeight="48dp" />
 
             <TextView
+                android:id="@+id/tv_discount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_below="@+id/tv_discount_category"
+                android:text="Discount:"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/et_discount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_discount_category"
+                android:layout_marginStart="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_toRightOf="@+id/tv_discount"
+                android:hint="eg.,SAVE25!"
+                android:inputType="text" />
+
+            <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_discount_category"
+                android:layout_below="@id/tv_discount"
                 android:layout_marginTop="35dp"
                 android:text="Description:"
                 android:textColor="@android:color/black"
@@ -99,7 +100,7 @@
                 android:id="@+id/sv_description"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@id/spinner_discount_category"
+                android:layout_below="@id/et_discount"
                 android:layout_toRightOf="@id/tv_description">
 
                 <EditText
@@ -125,27 +126,22 @@
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/ev_validity"
+                android:id="@+id/et_validity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/sv_description"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="18dp"
+                android:layout_marginTop="0dp"
                 android:layout_toRightOf="@id/tv_validity"
                 android:hint="eg., 2024-04-14"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:inputType="numberDecimal" />
 
-            <ImageButton
-                android:id="@+id/calendarButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/sv_description"
-                android:layout_toRightOf="@+id/ev_validity"
-                android:contentDescription="Calendar Icon"
-                android:src="@drawable/baseline_calendar_month_24" />
-
             <Button
-                android:id="@+id/transactionSave"
+                android:id="@+id/btn_save_coupon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_validity"

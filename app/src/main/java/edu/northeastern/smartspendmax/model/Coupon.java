@@ -1,5 +1,12 @@
 package edu.northeastern.smartspendmax.model;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@IgnoreExtraProperties
 public class Coupon {
 
 //    "discount": "10%",
@@ -17,6 +24,33 @@ public class Coupon {
     private String validity;
 
     private String couponId;
+
+    public Coupon() {
+    }
+
+    public Coupon(String adMakerName, String discount,
+                  String discountCategory, String targetCategory,
+                  String description, String validity) {
+        this.adMakerName = adMakerName;
+        this.discount = discount;
+        this.discountCategory = discountCategory;
+        this.targetCategory = targetCategory;
+        this.description = description;
+        this.validity = validity;
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("adMakerName", adMakerName);
+        result.put("discount", discount);
+        result.put("discountCategory", discountCategory);
+        result.put("targetCategory", targetCategory);
+        result.put("description", description);
+        result.put("validity", validity);
+
+        return result;
+    }
 
     public String getAdMakerName() {
         return adMakerName;
