@@ -66,6 +66,64 @@ public class InsightFragment extends Fragment {
     private FloatingActionButton fab;
     private String TAG = "--------INSIGHT FRAG------";
 
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            resetSpendingAmounts();
+            // Process each budget entry
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
+                if(map != null) {
+                    String category = Objects.requireNonNull(map.get("category")).toString();
+                    String timestamp = Objects.requireNonNull(map.get("timestamp")).toString();
+                    double amount = ((Number) Objects.requireNonNull(map.get("amount"))).doubleValue();
+                    date = convertStringToDate(timestamp);
+                    // Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount + " on " + timestamp);
+
+                    if(timestamp.startsWith(curMonth)){
+                        //Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount);
+
+                        SpendingTransaction transaction = null;
+                        switch (category) {
+                            case "housing":
+                                transaction = new SpendingTransaction(Category.HOUSING, amount);
+                                spendingHousing += amount;
+                                break;
+                            case "transportation":
+                                transaction = new SpendingTransaction(Category.TRANSPORTATION,amount);
+                                spendingTransportation += amount;
+                                break;
+                            case "utilities":
+                                transaction = new SpendingTransaction(Category.UTILITIES, amount);
+                                spendingUtilities += amount;
+                                break;
+                            case "grocery":
+                                transaction = new SpendingTransaction(Category.GROCERY, amount);
+                                spendingGrocery += amount;
+                                break;
+                            case "personal expense":
+                                transaction = new SpendingTransaction(Category.PERSONAL_EXPENSE, amount);
+                                spendingPersonalExpense += amount;
+                                break;
+                            case "other":
+                                transaction = new SpendingTransaction(Category.OTHER, amount);
+                                spendingOther += amount;
+                                break;
+                        }
+
+                    }
+                }
+            }
+            setupPieChart();
+            onDataFetchComplete();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("DBError", "Spending fetch cancelled", databaseError.toException());
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,107 +168,48 @@ public class InsightFragment extends Fragment {
         return view;
     }
 
-
     public void fetchSpendingData() {
-
         Log.d(TAG, "Starting to fetch budget and spending data.");
         databaseReference.child("spendings").child(curUserName)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        resetSpendingAmounts();
-                        // Process each budget entry
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                            if(map != null) {
-                                String category = Objects.requireNonNull(map.get("category")).toString();
-                                String timestamp = Objects.requireNonNull(map.get("timestamp")).toString();
-                                double amount = ((Number) Objects.requireNonNull(map.get("amount"))).doubleValue();
-                                date = convertStringToDate(timestamp);
-                                // Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount + " on " + timestamp);
-
-                                if(timestamp.startsWith(curMonth)){
-                                    //Log.d(TAG, "Processing transaction for category: " + category + ", amount: " + amount);
-
-                                    SpendingTransaction transaction = null;
-                                    switch (category) {
-                                        case "housing":
-                                            transaction = new SpendingTransaction(Category.HOUSING, amount);
-                                            spendingHousing += amount;
-                                            break;
-                                        case "transportation":
-                                            transaction = new SpendingTransaction(Category.TRANSPORTATION,amount);
-                                            spendingTransportation += amount;
-                                            break;
-                                        case "utilities":
-                                            transaction = new SpendingTransaction(Category.UTILITIES, amount);
-                                            spendingUtilities += amount;
-                                            break;
-                                        case "grocery":
-                                            transaction = new SpendingTransaction(Category.GROCERY, amount);
-                                            spendingGrocery += amount;
-                                            break;
-                                        case "personal expense":
-                                            transaction = new SpendingTransaction(Category.PERSONAL_EXPENSE, amount);
-                                            spendingPersonalExpense += amount;
-                                            break;
-                                        case "other":
-                                            transaction = new SpendingTransaction(Category.OTHER, amount);
-                                            spendingOther += amount;
-                                            break;
-                                    }
-
-                                }
-                            }
-                        }
-                        setupPieChart();
-                        onDataFetchComplete();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("DBError", "Spending fetch cancelled", databaseError.toException());
-                    }
-                });
+                .addValueEventListener(valueEventListener);
     }
 
     private void fetchBudgetData() {
+        databaseReference.child("budget").child(curUserName).child(budgetMonthIndex).addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            resetBudgetAmounts();
 
-        databaseReference.child("budget").child(curUserName).child(budgetMonthIndex)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        resetBudgetAmounts();
-
-                        Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                        if (map != null) {
-                            for (String key : map.keySet()) {
-                                if (!key.equals("timestamp")) {
-                                    double budget = ((Number) map.get(key)).doubleValue();
-                                    if (key.equals("housing")) {
-                                        budgetHousing = budget;
-                                    } else if (key.equals("transportation")) {
-                                        budgetTransportation = budget;
-                                    } else if (key.equals("grocery")) {
-                                        budgetGrocery = budget;
-                                    } else if (key.equals("utilities")) {
-                                        budgetUtilities = budget;
-                                    } else if (key.equals("personalExpense")) {
-                                        budgetPersonalExpense = budget;
-                                    } else if (key.equals("other")) {
-                                        budgetOther = budget;
-                                    }
-                                }
-                            }
-                            Log.d(TAG, "Budget Housing: " + budgetHousing + ", Budget Grocery: " + budgetGrocery);
+            Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+            if (map != null) {
+                for (String key : map.keySet()) {
+                    if (!key.equals("timestamp")) {
+                        double budget = ((Number) map.get(key)).doubleValue();
+                        if (key.equals("housing")) {
+                            budgetHousing = budget;
+                        } else if (key.equals("transportation")) {
+                            budgetTransportation = budget;
+                        } else if (key.equals("grocery")) {
+                            budgetGrocery = budget;
+                        } else if (key.equals("utilities")) {
+                            budgetUtilities = budget;
+                        } else if (key.equals("personalExpense")) {
+                            budgetPersonalExpense = budget;
+                        } else if (key.equals("other")) {
+                            budgetOther = budget;
                         }
-                        onDataFetchComplete();
                     }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("DBError", "Budget fetch cancelled", databaseError.toException());
-                    }
-                });
+                }
+                Log.d(TAG, "Budget Housing: " + budgetHousing + ", Budget Grocery: " + budgetGrocery);
+            }
+            onDataFetchComplete();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            Log.e("DBError", "Budget fetch cancelled", databaseError.toException());
+        }
+        });
 
     }
 
@@ -219,7 +218,6 @@ public class InsightFragment extends Fragment {
         if (dataFetchCompleteCounter >= 2) { // Both fetch operations are complete
             createCategoryInsights();
             setupRecyclerView();
-
         }
     }
 
@@ -233,7 +231,6 @@ public class InsightFragment extends Fragment {
         categoryInsightsList.add(new CategoryInsight("Other", spendingOther, budgetOther));
         Log.d(TAG, "CategoryList: " + categoryInsightsList.size());
     }
-
 
     private void setupPieChart() {
         List<PieEntry> pieEntries = new ArrayList<>();
@@ -346,5 +343,11 @@ public class InsightFragment extends Fragment {
         budgetOther = 1000.0;
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        databaseReference.child("spendings").child(curUserName)
+                    .removeEventListener(valueEventListener);
+        databaseReference = null;
+    }
 }

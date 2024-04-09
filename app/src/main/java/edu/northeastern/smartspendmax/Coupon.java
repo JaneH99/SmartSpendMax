@@ -6,11 +6,11 @@ public class Coupon {
     private String id;
     private String discount;
     private String description;
-    private LocalDate validity;
+    private String validity;
 
     private int collectedNumber;
 
-    public Coupon(String id, String discount, String description, LocalDate validity, int collectedNumber) {
+    public Coupon(String id, String discount, String description, String validity, int collectedNumber) {
         this.id = id;
         this.discount = discount;
         this.description = description;
@@ -43,11 +43,11 @@ public class Coupon {
         this.description = description;
     }
 
-    public LocalDate getValidity() {
+    public String getValidity() {
         return validity;
     }
 
-    public void setValidity(LocalDate validity) {
+    public void setValidity(String validity) {
         this.validity = validity;
     }
 

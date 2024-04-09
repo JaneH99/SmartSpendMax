@@ -23,17 +23,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.northeastern.smartspendmax.adsMaker.AddNewCoupon;
 import edu.northeastern.smartspendmax.notification.CouponAdapter;
+import edu.northeastern.smartspendmax.util.DateHandler;
 
 public class CouponSentHistory extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CouponSentHistoryAdapter couponAdapter;
-    private LocalDate date;
+    String curDate = DateHandler.getCurrentDate();
     private FloatingActionButton fab;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -41,6 +43,7 @@ public class CouponSentHistory extends AppCompatActivity {
 
     private TextView tvAdsMaker;
     private TextView tvIntro;
+
     private String TAG = "===CouponSentHistory===";
 
     @Override
@@ -78,15 +81,6 @@ public class CouponSentHistory extends AppCompatActivity {
         fetchCoupon();
     }
 
-    private LocalDate convertStringToDate(String timestamp) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        try {
-            return LocalDate.parse(timestamp, formatter);
-        } catch (DateTimeParseException e) {
-            Log.e(TAG, "Failed to parse date: " + timestamp, e);
-            return null;
-        }
-    }
 
     private void fetchCoupon() {
         databaseReference.child("coupons").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -97,17 +91,13 @@ public class CouponSentHistory extends AppCompatActivity {
                     String adMakerName = couponSnapshot.child("adMakerName").getValue(String.class);
 
                     if (curUserName.equals(adMakerName)) {
-
                         String discount = couponSnapshot.child("discount").getValue(String.class) != null ? couponSnapshot.child("discount").getValue(String.class) : "[N/A]";
                         String description = couponSnapshot.child("description").getValue(String.class) != null ? couponSnapshot.child("description").getValue(String.class) : "[N/A]";
                         // Use current date as validity date
-                        String validityInString = couponSnapshot.child("validity").getValue(String.class);
-                        LocalDate date = validityInString != null ? convertStringToDate(validityInString) : LocalDate.now();
-
+                        String date = couponSnapshot.child("validity").getValue(String.class);
 
                         String couponID = couponSnapshot.getKey();
 
-                        Log.e(TAG, "Failed to find data: " + couponID + " : " + description + " / " + discount + " / " + validityInString);
                         int count = 0; // Placeholder for actual count logic
 
                         // Add a placeholder coupon with a count of 0 for now

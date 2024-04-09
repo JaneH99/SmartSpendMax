@@ -40,10 +40,7 @@ public class CouponSentHistoryAdapter extends RecyclerView.Adapter<CouponSentHis
         holder.tvCouponDiscountContent.setText("Discount: " + currentCoupon.getDiscount());
         holder.tvDescription.setText("Description: "+ currentCoupon.getDescription());
 
-        //format valid date
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        String formattedValidity = currentCoupon.getValidity().format(formatter);
-
+        String formattedValidity = currentCoupon.getValidity();
         holder.tvValidity.setText("Valid Date: "+ formattedValidity);
         holder.tvCollectedNumber.setText(String.valueOf(currentCoupon.getCollectedNumber()));
     }
@@ -58,7 +55,6 @@ public class CouponSentHistoryAdapter extends RecyclerView.Adapter<CouponSentHis
 
         public CouponHistoryViewHolder(@NonNull View itemView) {
             super(itemView);
-
 
             tvCouponDiscountContent = itemView.findViewById(R.id.tv_coupon_discount_content);
             tvDescription = itemView.findViewById(R.id.tv_description_content);
