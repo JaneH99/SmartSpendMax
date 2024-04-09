@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
         tv_rv_coupons_placeholder = view.findViewById(R.id.tv_rv_coupons_placeholder);
         tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
         getCurrentMonth();
-        tv_month.setText("Total Summary (" + currYear + "/" + String.format("%02d", currMonth) + ")");
+        tv_month.setText(currYear + "/" + String.format("%02d", currMonth));
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         currUserId = sharedPref.getString("LastLoggedInUser", "defaultUser");
@@ -202,6 +202,7 @@ public class HomeFragment extends Fragment {
         overallChart.getDescription().setEnabled(false);
         overallChart.setCenterText("Expenses: " + totalSpending +
                 "\n" + "Budget: " + totalBudget);
+        overallChart.setCenterTextColor(R.color.colorPrimaryDark);
         overallChart.setCenterTextSize(18f);
         overallChart.invalidate();
     }

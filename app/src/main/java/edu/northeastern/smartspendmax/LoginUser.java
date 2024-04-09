@@ -187,7 +187,7 @@ public class LoginUser extends AppCompatActivity {
     }
 
     private void toAdsMakerHomepage() {
-        Intent intent = new Intent(LoginUser.this, AddNewCoupon.class);
+        Intent intent = new Intent(LoginUser.this, CouponSentHistory.class);
         intent.putExtra("userName", name);
         startActivity(intent);
     }

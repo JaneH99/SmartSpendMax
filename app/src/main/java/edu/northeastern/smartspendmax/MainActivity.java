@@ -144,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
                                     Map<String, Object> map = (Map<String, Object>) entrySnapshot.getValue();
                                     if(map != null) {
                                         currentAdMaker = Objects.requireNonNull(map.get("adMakerName")).toString();
+                                        Log.d(LOG, "currentAdMaker " );
                                         currentDescription = Objects.requireNonNull(map.get("description")).toString();
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            Log.d(LOG, "sendNotification" );
                                             sendNotification(getBaseContext());
                                         }
                                     }
