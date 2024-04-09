@@ -38,6 +38,26 @@ public class SpendingFragment extends Fragment {
     private FloatingActionButton fab;
     private FirebaseDatabase database;
     private String curUserName;
+    SpendingInOneCategory spendingInHousing;
+    SpendingInOneCategory spendingInTransportation;
+    SpendingInOneCategory spendingInUtilities;
+    SpendingInOneCategory spendingInGrocery;
+    SpendingInOneCategory spendingInPersonalExpense;
+    SpendingInOneCategory spendingInOther;
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            resetCategoryContent();
+            retrieveUpdatedData(snapshot);
+            rebuildContent();
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +72,9 @@ public class SpendingFragment extends Fragment {
         //retrieve current user
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         curUserName = sharedPref.getString("LastLoggedInUser", "defaultUser");
-        consolidateData();
+
+        //Start event listener
+        database.getReference().child("spendings").child(curUserName).addValueEventListener(valueEventListener);
 
         //Floating Button
         fab = view.findViewById(R.id.fab);
@@ -67,68 +89,59 @@ public class SpendingFragment extends Fragment {
         return view;
     }
 
-    private void consolidateData() {
+    private void resetCategoryContent() {
+        spendingInHousing = new SpendingInOneCategory(Category.HOUSING);
+        spendingInTransportation = new SpendingInOneCategory(Category.TRANSPORTATION);
+        spendingInUtilities = new SpendingInOneCategory(Category.UTILITIES);
+        spendingInGrocery = new SpendingInOneCategory(Category.GROCERY);
+        spendingInPersonalExpense = new SpendingInOneCategory(Category.PERSONAL_EXPENSE);
+        spendingInOther = new SpendingInOneCategory(Category.OTHER);
+    }
 
-        SpendingInOneCategory spendingInHousing = new SpendingInOneCategory(Category.HOUSING);
-        SpendingInOneCategory spendingInTransportation = new SpendingInOneCategory(Category.TRANSPORTATION);
-        SpendingInOneCategory spendingInUtilities = new SpendingInOneCategory(Category.UTILITIES);
-        SpendingInOneCategory spendingInGrocery = new SpendingInOneCategory(Category.GROCERY);
-        SpendingInOneCategory spendingInPersonalExpense = new SpendingInOneCategory(Category.PERSONAL_EXPENSE);
-        SpendingInOneCategory spendingInOther = new SpendingInOneCategory(Category.OTHER);
-
-        database.getReference().child("spendings").child(curUserName).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot entrySnapshot: snapshot.getChildren()) {
-                    //Retrieve information
-                    Map<String, Object> map = (Map<String, Object>) entrySnapshot.getValue();
-                    if(map != null) {
-                        double amount = ((Number) Objects.requireNonNull(map.get("amount"))).doubleValue();
-                        String category = Objects.requireNonNull(map.get("category")).toString();
-                        String vendor = Objects.requireNonNull(map.get("vendor")).toString();
-                        String timestamp = Objects.requireNonNull(map.get("timestamp")).toString();
-                        LocalDate date = convertStringToDate(timestamp);
-                        if(date.getMonthValue() == LocalDate.now().getMonthValue()) {
-                            if(category.equals("housing")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.HOUSING, vendor, amount);
-                                spendingInHousing.getSpendingInTheCategory().add(transaction);
-                            } else if(category.equals("transportation")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.TRANSPORTATION, vendor, amount);
-                                spendingInTransportation.getSpendingInTheCategory().add(transaction);
-                            } else if(category.equals("utilities")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.UTILITIES, vendor, amount);
-                                spendingInUtilities.getSpendingInTheCategory().add(transaction);
-                            } else if(category.equals("grocery")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.GROCERY, vendor, amount);
-                                spendingInGrocery.getSpendingInTheCategory().add(transaction);
-                            } else if(category.equals("personal expense")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.PERSONAL_EXPENSE, vendor, amount);
-                                spendingInPersonalExpense.getSpendingInTheCategory().add(transaction);
-                            } else if(category.equals("other")) {
-                                SpendingTransaction transaction = new SpendingTransaction(date, Category.OTHER, vendor, amount);
-                                spendingInOther.getSpendingInTheCategory().add(transaction);
-                            }
-                        }
+    private void retrieveUpdatedData(DataSnapshot dataSnapshot) {
+        for(DataSnapshot entrySnapshot: dataSnapshot.getChildren()) {
+            //Retrieve information
+            Map<String, Object> map = (Map<String, Object>) entrySnapshot.getValue();
+            if(map != null) {
+                double amount = ((Number) Objects.requireNonNull(map.get("amount"))).doubleValue();
+                String category = Objects.requireNonNull(map.get("category")).toString();
+                String vendor = Objects.requireNonNull(map.get("vendor")).toString();
+                String timestamp = Objects.requireNonNull(map.get("timestamp")).toString();
+                LocalDate date = convertStringToDate(timestamp);
+                if(date.getMonthValue() == LocalDate.now().getMonthValue()) {
+                    if(category.equals("housing")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.HOUSING, vendor, amount);
+                        spendingInHousing.getSpendingInTheCategory().add(transaction);
+                    } else if(category.equals("transportation")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.TRANSPORTATION, vendor, amount);
+                        spendingInTransportation.getSpendingInTheCategory().add(transaction);
+                    } else if(category.equals("utilities")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.UTILITIES, vendor, amount);
+                        spendingInUtilities.getSpendingInTheCategory().add(transaction);
+                    } else if(category.equals("grocery")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.GROCERY, vendor, amount);
+                        spendingInGrocery.getSpendingInTheCategory().add(transaction);
+                    } else if(category.equals("personal expense")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.PERSONAL_EXPENSE, vendor, amount);
+                        spendingInPersonalExpense.getSpendingInTheCategory().add(transaction);
+                    } else if(category.equals("other")) {
+                        SpendingTransaction transaction = new SpendingTransaction(date, Category.OTHER, vendor, amount);
+                        spendingInOther.getSpendingInTheCategory().add(transaction);
                     }
                 }
-
-                //Sort each category in descending order
-                spendingInHousing.sortByTransactionDate();
-                spendingInTransportation.sortByTransactionDate();
-                spendingInUtilities.sortByTransactionDate();
-                spendingInGrocery.sortByTransactionDate();
-                spendingInPersonalExpense.sortByTransactionDate();
-                spendingInOther.sortByTransactionDate();
-                spendingAdapter = new SpendingAdapter(mylist);
-                recyclerView.setAdapter(spendingAdapter);
             }
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        //Sort each category in descending order
+        spendingInHousing.sortByTransactionDate();
+        spendingInTransportation.sortByTransactionDate();
+        spendingInUtilities.sortByTransactionDate();
+        spendingInGrocery.sortByTransactionDate();
+        spendingInPersonalExpense.sortByTransactionDate();
+        spendingInOther.sortByTransactionDate();
+    }
 
-            }
-        });
-
+    private void rebuildContent() {
         mylist = new ArrayList<>();
         mylist.add(spendingInHousing);
         mylist.add(spendingInTransportation);
@@ -136,6 +149,8 @@ public class SpendingFragment extends Fragment {
         mylist.add(spendingInGrocery);
         mylist.add(spendingInPersonalExpense);
         mylist.add(spendingInOther);
+        spendingAdapter = new SpendingAdapter(mylist);
+        recyclerView.setAdapter(spendingAdapter);
     }
 
     private LocalDate convertStringToDate(String timestamp) {
@@ -149,8 +164,10 @@ public class SpendingFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        consolidateData();
+    public void onDestroy() {
+        super.onDestroy();
+        //remove the event listener
+        database.getReference().child("spendings").child(curUserName)
+                .removeEventListener(valueEventListener);
     }
 }
