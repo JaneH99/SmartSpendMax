@@ -1,5 +1,7 @@
 package edu.northeastern.smartspendmax;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.window.OnBackInvokedDispatcher;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -61,37 +65,46 @@ public class MainActivity extends AppCompatActivity {
     private static final int NOTIFICATION_PERMISSION = 9009;
     private String currentAdMaker;
     private String currentDescription;
-
+    private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
+    private int curFragmentID;
+    @NonNull
+    @Override
+    public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
+        return super.getOnBackInvokedDispatcher();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         Toolbar toolBar = findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+
+        initiateFragment(savedInstanceState);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemID = item.getItemId();
-                if (itemID == R.id.home) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                    return true;
-                } else if (itemID == R.id.insight) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InsightFragment()).commit();
-                    return true;
-                } else if (itemID == R.id.spending) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SpendingFragment()).commit();
-                    return true;
-                } else if (itemID == R.id.budget) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BudgetFragment()).commit();
-                    return true;
-                } else if (itemID == R.id.wallet) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment()).commit();
-                    return true;
-                }
-                return false;
+                return linkToFragment(itemID);
+            }
+        });
+
+        //Handle the case when back button is pressed. Show warning message
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Sign Out")
+                        .setMessage("Are you sure you want to sign out?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // User clicked "Yes" button, perform exit action
+                            finish();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
             }
         });
 
@@ -106,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         //Collect a set to store all existing coupons
         couponCollection = new HashSet<>();
-        // Initialize couponCollection with existing coupons' keys in the database
+        // Initialize couponCollection with existing coupons' keys in the database. Then start monitoring changes
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,6 +135,41 @@ public class MainActivity extends AppCompatActivity {
                 // Handle database error
             }
         });
+    }
+
+    private boolean linkToFragment(int itemID) {
+        if (itemID == R.id.home) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            return true;
+        } else if (itemID == R.id.insight) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InsightFragment()).commit();
+            return true;
+        } else if (itemID == R.id.spending) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SpendingFragment()).commit();
+            return true;
+        } else if (itemID == R.id.budget) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BudgetFragment()).commit();
+            return true;
+        } else if (itemID == R.id.wallet) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment()).commit();
+            return true;
+        }
+        return false;
+
+    }
+    private void initiateFragment(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            curFragmentID = savedInstanceState.getInt(KEY_OF_INSTANCE);
+            linkToFragment(curFragmentID);
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(KEY_OF_INSTANCE, curFragmentID);
+        super.onSaveInstanceState(outState);
     }
 
     private void startListening() {
