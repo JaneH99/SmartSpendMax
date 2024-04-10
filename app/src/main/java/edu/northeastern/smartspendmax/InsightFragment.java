@@ -335,7 +335,7 @@ public class InsightFragment extends Fragment {
     }
 
     private void resetBudgetAmounts() {
-        budgetHousing = 1000.0;
+        budgetHousing = 2500.0;
         budgetTransportation = 1000.0;
         budgetUtilities = 1000.0;
         budgetGrocery = 1000.0;

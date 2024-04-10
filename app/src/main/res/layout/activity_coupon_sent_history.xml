@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".CouponSentHistory">
 
+    <ImageView
+        android:id="@+id/coupon_history_exit"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/baseline_logout_24"
+        app:tint="@color/colorPrimaryDark" />
+
+    <TextView
+        android:id="@+id/coupon_history"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:textStyle="bold"
+        android:text="VIEW ALL COUPONS"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="18dp"
+        android:textSize="20dp"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <TextView
         android:id="@+id/welcome_text"
         android:layout_width="match_parent"
@@ -13,9 +36,9 @@
         android:textStyle="bold"
         android:text="WELCOME, ADSMAKER!"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="62dp"
         android:textSize="24dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimaryMedium"
         app:layout_constraintTop_toTopOf="parent"
         />
 

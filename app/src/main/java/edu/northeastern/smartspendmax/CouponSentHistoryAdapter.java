@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import edu.northeastern.smartspendmax.model.Coupon;
+
 public class CouponSentHistoryAdapter extends RecyclerView.Adapter<CouponSentHistoryAdapter.CouponHistoryViewHolder>{
     private List<Coupon> couponList;
 

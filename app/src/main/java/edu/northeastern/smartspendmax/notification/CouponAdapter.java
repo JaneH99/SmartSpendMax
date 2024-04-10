@@ -84,7 +84,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.Notificati
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
+            //ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
             tvAdsMaker = itemView.findViewById(R.id.tv_adsMaker);
             tvDiscount = itemView.findViewById(R.id.tv_discount);
             tvDescription = itemView.findViewById(R.id.tv_description);
