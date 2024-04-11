@@ -86,7 +86,7 @@ public class CouponSentHistory extends AppCompatActivity {
                     .setMessage("Are you sure you want to sign out?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         // Intent to navigate back to the LoginActivity
-                        Intent intent = new Intent(CouponSentHistory.this, LoginUser.class);
+                        Intent intent = new Intent(CouponSentHistory.this, LoginAdsMaker.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
