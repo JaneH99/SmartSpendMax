@@ -1,15 +1,19 @@
 package edu.northeastern.smartspendmax;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -31,6 +35,7 @@ import java.util.Map;
 import edu.northeastern.smartspendmax.adsMaker.AddNewCoupon;
 import edu.northeastern.smartspendmax.notification.CouponAdapter;
 import edu.northeastern.smartspendmax.util.DateHandler;
+import edu.northeastern.smartspendmax.model.Coupon;
 
 public class CouponSentHistory extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -40,9 +45,9 @@ public class CouponSentHistory extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private String curUserName;
-
     private TextView tvAdsMaker;
     private TextView tvIntro;
+    private ImageView ivExit;
 
     private String TAG = "===CouponSentHistory===";
 
@@ -53,6 +58,7 @@ public class CouponSentHistory extends AppCompatActivity {
 
         tvAdsMaker =findViewById(R.id.welcome_text);
         tvIntro = findViewById(R.id.intro_text);
+        ivExit = findViewById(R.id.coupon_history_exit);
 
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -74,6 +80,37 @@ public class CouponSentHistory extends AppCompatActivity {
 
         tvAdsMaker.setText("WELCOME! " + curUserName.toUpperCase());
         tvIntro.setText("Below are the results statistics until " + curDate);
+        ivExit.setOnClickListener(v -> {
+            new AlertDialog.Builder(CouponSentHistory.this)
+                    .setTitle("Sign Out")
+                    .setMessage("Are you sure you want to sign out?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // Intent to navigate back to the LoginActivity
+                        Intent intent = new Intent(CouponSentHistory.this, LoginAdsMaker.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+        });
+
+        //Handle the case when back button is pressed. Show warning message
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new AlertDialog.Builder(CouponSentHistory.this)
+                        .setTitle("Sign Out")
+                        .setMessage("Are you sure you want to sign out?")
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            // User clicked "Yes" button, perform exit action
+                            finish();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
+            }
+        });
 
         fab = findViewById(R.id.fab_coupon);
         fab.setOnClickListener(v -> startActivity(new Intent(CouponSentHistory.this, AddNewCoupon.class)));
@@ -83,7 +120,7 @@ public class CouponSentHistory extends AppCompatActivity {
 
 
     private void fetchCoupon() {
-        databaseReference.child("coupons").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("coupons").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Coupon> coupons = new ArrayList<>();
@@ -117,7 +154,7 @@ public class CouponSentHistory extends AppCompatActivity {
     }
 
     private void updateCollectedCounts(List<Coupon> coupons) {
-        databaseReference.child("user-coupon").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("user-coupon").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Map to keep track of collected counts for each coupon
@@ -130,7 +167,7 @@ public class CouponSentHistory extends AppCompatActivity {
                 }
                 // Update the collected number for each coupon
                 for (Coupon coupon : coupons) {
-                    Integer count = collectedCounts.get(coupon.getId());
+                    Integer count = collectedCounts.get(coupon.getCouponId());
                     if (count != null) {
                         coupon.setCollectedNumber(count);
                     }
@@ -146,7 +183,6 @@ public class CouponSentHistory extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

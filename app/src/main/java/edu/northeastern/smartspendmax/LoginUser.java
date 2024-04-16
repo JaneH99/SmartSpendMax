@@ -192,5 +192,4 @@ public class LoginUser extends AppCompatActivity {
         startActivity(intent);
     }
 
-
 }

@@ -22,7 +22,7 @@ public class Coupon {
     private String targetCategory;
     private String description;
     private String validity;
-
+    private int collectedNumber;
     private String couponId;
 
     public Coupon() {
@@ -37,6 +37,14 @@ public class Coupon {
         this.targetCategory = targetCategory;
         this.description = description;
         this.validity = validity;
+    }
+
+    public Coupon(String couponId, String discount, String description, String validity, int collectedNumber) {
+        this.couponId = couponId;
+        this.discount = discount;
+        this.description = description;
+        this.validity = validity;
+        this.collectedNumber = collectedNumber;
     }
 
     @Exclude
@@ -82,5 +90,13 @@ public class Coupon {
 
     public void setCouponId(String couponId) {
         this.couponId = couponId;
+    }
+
+    public int getCollectedNumber() {
+        return collectedNumber;
+    }
+
+    public void setCollectedNumber(int collectedNumber) {
+        this.collectedNumber = collectedNumber;
     }
 }

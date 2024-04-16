@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.northeastern.smartspendmax.CouponSentHistory;
 import edu.northeastern.smartspendmax.R;
 import edu.northeastern.smartspendmax.model.Coupon;
 import edu.northeastern.smartspendmax.util.CommonConstants;
@@ -95,6 +96,8 @@ public class AddNewCoupon extends AppCompatActivity {
             public void onClick(View v) {
                 if (validateInput()) {
                     saveDataToDB();
+                    startActivity(new Intent(AddNewCoupon.this, CouponSentHistory.class));
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Please verify your input", Toast.LENGTH_LONG).show();
                 }

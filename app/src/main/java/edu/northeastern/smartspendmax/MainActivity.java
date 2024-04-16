@@ -227,7 +227,19 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
         if (itemID == R.id.signout) {
-            Toast.makeText(this, "User Log Out", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Sign Out")
+                    .setMessage("Are you sure you want to sign out?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        // User clicked "Yes" button, perform sign out and navigate to LoginUser
+                        Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, LoginUser.class);
+                        startActivity(intent);
+                        finish();
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
+            return true;
         } else if (itemID == R.id.notification) {
             Toast.makeText(this, "Notification Selected", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
