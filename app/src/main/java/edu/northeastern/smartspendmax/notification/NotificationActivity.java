@@ -3,6 +3,7 @@ package edu.northeastern.smartspendmax.notification;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -32,6 +34,8 @@ public class NotificationActivity extends AppCompatActivity {
     private List<String> couponIDList = new ArrayList<>();
 
     private FirebaseDatabase db;
+    private List<String> receivedCoupons = new ArrayList<>();
+    private List<String> collectedCoupons = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +51,8 @@ public class NotificationActivity extends AppCompatActivity {
         Log.d(TAG, "currUserId = " + currUserId);
 
         db = FirebaseDatabase.getInstance();
-        getReceivedCoupons();
+//        getReceivedCoupons();
+        getCollectedCoupons();
     }
 
     // get couponID list ===== old version ==== get receivedCoupon from "ads" node
@@ -78,10 +83,9 @@ public class NotificationActivity extends AppCompatActivity {
         db.getReference("user-coupon/" + currUserId + "/receivedCoupon").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                System.out.println("snapshot.key = " + snapshot.getKey() + ", ChildCount = " + snapshot.getChildrenCount());
                 for (DataSnapshot entry : snapshot.getChildren()) {
                     couponIDList.add(entry.getKey());
-                    System.out.println("receivedCoupon in notification = " + entry.getKey());
+                    Log.d(TAG, "receivedCoupon in notification = " + entry.getKey());
                 }
                 getCouponDetails();
             }
@@ -105,6 +109,60 @@ public class NotificationActivity extends AppCompatActivity {
                     couponList.add(coupon);
                     CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
                     Log.d(TAG, "getCouponContentList: notificationList size: " + couponList.size());
+                    recyclerView.setAdapter(adapter);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+    }
+
+    private void getCollectedCoupons() {
+        DatabaseReference userCouponRef = db.getReference("user-coupon/" + currUserId);
+        userCouponRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Retrieve receivedCoupon
+                DataSnapshot receivedCouponSnapshot = snapshot.child("receivedCoupon");
+                for (DataSnapshot couponSnapshot : receivedCouponSnapshot.getChildren()) {
+                    String couponId = couponSnapshot.getKey();
+                    receivedCoupons.add(couponId);
+                }
+
+                // Retrieve collectedCoupon
+                DataSnapshot collectedCouponSnapshot = snapshot.child("collectedCoupon");
+                for (DataSnapshot couponSnapshot : collectedCouponSnapshot.getChildren()) {
+                    String couponId = couponSnapshot.getKey();
+                    collectedCoupons.add(couponId);
+                }
+                getCouponDetailWithCollectedInfo();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getCouponDetailWithCollectedInfo() {
+        for (String couponId : receivedCoupons) {
+            db.getReference("coupons").child(couponId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Coupon coupon = snapshot.getValue(Coupon.class);
+                    coupon.setCouponId(couponId);
+                    if (collectedCoupons.contains(couponId)) {
+                        coupon.setCollected(true);
+                    } else {
+                        coupon.setCollected(false);
+                    }
+                    couponList.add(coupon);
+                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
                     recyclerView.setAdapter(adapter);
                 }
 

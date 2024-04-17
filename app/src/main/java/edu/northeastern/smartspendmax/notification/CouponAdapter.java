@@ -1,6 +1,8 @@
 package edu.northeastern.smartspendmax.notification;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +20,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import edu.northeastern.smartspendmax.MainActivity;
 import edu.northeastern.smartspendmax.R;
 import edu.northeastern.smartspendmax.model.Coupon;
+import edu.northeastern.smartspendmax.util.ImageHelper;
 
 public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.NotificationViewHolder> {
 
+    private static final String TAG = "CouponAdapter";
     private Context context;
     private List<Coupon> couponList;
     private String currUserId = "";
@@ -45,25 +50,29 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.Notificati
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Coupon coupon = couponList.get(position);
+        holder.ivAdsMakerImage.setImageResource(ImageHelper.setImageBasedOnString(coupon.getAdMakerName()));
         holder.tvAdsMaker.setText(coupon.getAdMakerName());
         holder.tvDiscount.setText(coupon.getDiscount());
         holder.tvDescription.setText(coupon.getDescription());
         holder.tvValidity.setText("Expire time:" + coupon.getValidity().substring(0, 10));
+        holder.addToWalletBtn.setEnabled(!coupon.getCollected());
 
         holder.addToWalletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Added item to wallet: " + coupon.getCouponId());
                 db.getReference("user-coupon/" + currUserId + "/collectedCoupon")
                     .child(coupon.getCouponId()).setValue(true).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(context, "Add coupon successfully", Toast.LENGTH_SHORT);
-                                System.out.println("write successful: " + coupon.getCouponId() + ", for user: " + currUserId);
+                                Log.d(TAG,"write successful: " + coupon.getCouponId() + ", for user: " + currUserId);
+                                notifyDataSetChanged();
+                                Intent intent = new Intent(context, MainActivity.class);
+                                context.startActivity(intent);
                             } else {
                                 Toast.makeText(context, "Fail to add coupon.", Toast.LENGTH_SHORT);
-                                System.out.println("write fail: " + coupon.getCouponId() + ", for user: " + currUserId);
+                                Log.d(TAG,"write fail: " + coupon.getCouponId() + ", for user: " + currUserId);
                             }
                         }
                     });
@@ -84,7 +93,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.Notificati
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            //ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
+            ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
             tvAdsMaker = itemView.findViewById(R.id.tv_adsMaker);
             tvDiscount = itemView.findViewById(R.id.tv_discount);
             tvDescription = itemView.findViewById(R.id.tv_description);

@@ -25,7 +25,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -208,7 +207,7 @@ public class AddNewCoupon extends AppCompatActivity {
             childUpdates.put(CommonConstants.NODE_ADS + "/" +adsId + "/sentTo/"+userId, true);
         }
         for (String key : childUpdates.keySet()) {
-            System.out.println(key + ":" + childUpdates.get(key));
+            Log.d(TAG, "updateMultipleNodes: " + key + ":" + childUpdates.get(key));
         }
         db.getReference().updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

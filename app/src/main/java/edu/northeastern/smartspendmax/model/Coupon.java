@@ -9,13 +9,6 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Coupon {
 
-//    "discount": "10%",
-//    "discountCategory": "grocery",
-//    "target_category": "grocery",
-//    "description": "Get 25% off your next purchase with code SAVE25!",
-//    "validity": "2100-12-31T00:00:00Z",
-//    "adMakerName": "Target"
-
     private String adMakerName;
     private String discount;
     private String discountCategory;
@@ -24,6 +17,7 @@ public class Coupon {
     private String validity;
     private int collectedNumber;
     private String couponId;
+    private Boolean collected;
 
     public Coupon() {
     }
@@ -98,5 +92,14 @@ public class Coupon {
 
     public void setCollectedNumber(int collectedNumber) {
         this.collectedNumber = collectedNumber;
+    }
+
+
+    public Boolean getCollected() {
+        return collected;
+    }
+
+    public void setCollected(Boolean collected) {
+        this.collected = collected;
     }
 }

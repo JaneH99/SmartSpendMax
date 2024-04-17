@@ -241,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
                     .show();
             return true;
         } else if (itemID == R.id.notification) {
-            Toast.makeText(this, "Notification Selected", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);
         }
