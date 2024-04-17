@@ -5,6 +5,7 @@ import static com.github.mikephil.charting.components.Legend.LegendOrientation.H
 import static com.github.mikephil.charting.components.Legend.LegendOrientation.VERTICAL;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -65,6 +66,7 @@ public class HomeFragment extends Fragment {
 
     private List<String> uncollectedCouponIds = new ArrayList<>();
     private List<Coupon> uncollectedCouponDetails = new ArrayList<>();
+    private int orientation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,9 +90,14 @@ public class HomeFragment extends Fragment {
         db = FirebaseDatabase.getInstance();
         getTotalSpending();
 
+        orientation = getResources().getConfiguration().orientation;
         // show coupons horizontally
         recyclerView = view.findViewById(R.id.rv_coupons);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
+        } else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
+        }
 
         getUncollectedCouponIds();
 
@@ -193,17 +200,31 @@ public class HomeFragment extends Fragment {
         PieData pieData = new PieData(pieDataSet);
         overallChart.setData(pieData);
         overallChart.setDrawEntryLabels(false);
-        overallChart.setExtraOffsets(8, 8, 8, 8);
         Legend legend = overallChart.getLegend();
         legend.setEnabled(true);
         legend.setOrientation(HORIZONTAL);
         legend.setXOffset(120f);
         legend.setYOffset(0f);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            overallChart.setExtraOffsets(3, 3, 3, 3);
+            legend.setOrientation(VERTICAL);
+            legend.setXOffset(20f);
+            legend.setYOffset(20f);
+        } else {
+            overallChart.setExtraOffsets(8, 8, 8, 8);
+            legend.setOrientation(HORIZONTAL);
+            legend.setXOffset(120f);
+            legend.setYOffset(0f);
+        }
         overallChart.getDescription().setEnabled(false);
         overallChart.setCenterText("Expenses: " + totalSpending +
                 "\n" + "Budget: " + totalBudget);
         overallChart.setCenterTextColor(R.color.colorPrimaryDark);
-        overallChart.setCenterTextSize(18f);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            overallChart.setCenterTextSize(14f);
+        } else {
+            overallChart.setCenterTextSize(18f);
+        }
         overallChart.invalidate();
     }
 

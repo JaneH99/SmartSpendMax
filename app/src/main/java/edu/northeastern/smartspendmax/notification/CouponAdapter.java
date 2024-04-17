@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.northeastern.smartspendmax.R;
 import edu.northeastern.smartspendmax.model.Coupon;
+import edu.northeastern.smartspendmax.util.ImageHelper;
 
 public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.NotificationViewHolder> {
 
@@ -45,6 +46,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.Notificati
     @Override
     public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
         Coupon coupon = couponList.get(position);
+        holder.ivAdsMakerImage.setImageResource(ImageHelper.setImageBasedOnString(coupon.getAdMakerName()));
         holder.tvAdsMaker.setText(coupon.getAdMakerName());
         holder.tvDiscount.setText(coupon.getDiscount());
         holder.tvDescription.setText(coupon.getDescription());
@@ -84,7 +86,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.Notificati
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            //ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
+            ivAdsMakerImage = itemView.findViewById(R.id.iv_adsMaker_image);
             tvAdsMaker = itemView.findViewById(R.id.tv_adsMaker);
             tvDiscount = itemView.findViewById(R.id.tv_discount);
             tvDescription = itemView.findViewById(R.id.tv_description);
