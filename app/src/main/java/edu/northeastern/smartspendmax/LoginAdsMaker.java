@@ -83,44 +83,22 @@ public class LoginAdsMaker extends AppCompatActivity {
                         Toast.makeText(LoginAdsMaker.this, "Database error", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
         });
     }
 
     private void disconnectCurrentUser() {
-        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        String currentUserName = sharedPref.getString("LastLoggedInUser", null);
-        if (currentUserName != null) {
-//            DatabaseReference userRef = db.getReference("users").child(currentUserName);
-            adsMakerRef.child(currAdsMakerId + "/online").setValue(false);
+        if (db != null) {
+            SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+            String currentUserName = sharedPref.getString("LastLoggedInUser", null);
+            if (currentUserName != null) {
+//              DatabaseReference userRef = db.getReference("users").child(currentUserName);
+                adsMakerRef.child(currAdsMakerId + "/online").setValue(false);
+            }
+        }else {
+            Log.d("AdsMaker", "Firebase database not initialized");
         }
     }
 
-//    private void proceedToNextActivity(String userName) {
-//        DatabaseReference userRef = reference.child(userName);
-//
-//        // Update the user's login state and time
-//        Map<String, Object> userUpdates = new HashMap<>();
-//        userUpdates.put("online", true);
-//        userUpdates.put("userName", userName);
-//        userUpdates.put("loginTime", getCurrentTime()); // Assuming you have a method to get the current time in the desired format
-//
-//        userRef.updateChildren(userUpdates);
-//
-//        Calendar calendar = Calendar.getInstance();
-//        int month = calendar.get(Calendar.MONTH) + 1;
-//
-//        // Continue with shared preferences and starting the next activity
-//        SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putString("LastLoggedInUser", userName);
-//        editor.putInt("LoginMonth", month);
-//        editor.apply();
-//
-//        Intent intent = new Intent(LoginUser.this, MainActivity.class);
-//        intent.putExtra("userName", userName);
-//        startActivity(intent);
-//    }
+
 }

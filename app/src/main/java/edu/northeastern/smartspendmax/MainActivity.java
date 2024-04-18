@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (isFinishing()) return;
                 for (DataSnapshot entrySnapshot : dataSnapshot.getChildren()) {
                     couponCollection.add(entrySnapshot.getKey());
                 }
@@ -233,7 +234,8 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         // User clicked "Yes" button, perform sign out and navigate to LoginUser
                         Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainActivity.this, LoginUser.class);
+                        Intent intent = new Intent(MainActivity.this, Login.class);
+                        // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
                     })
@@ -300,4 +302,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mDatabaseReference != null && mValueEventListener != null) {
+            mDatabaseReference.removeEventListener(mValueEventListener);
+        }
+    }
+
 }

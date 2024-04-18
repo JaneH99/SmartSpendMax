@@ -61,45 +61,46 @@ public class LoginUser extends AppCompatActivity {
             userLoginButton = findViewById(R.id.buttonAdsMakerLogin);
         }
 
-        userLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                name = username.getText().toString().trim();
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference("users");
+            userLoginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                if(name != null && !name.isEmpty()){
-                    disconnectCurrentUser();
-                }
-                if (name.isEmpty()) {
-                    Toast.makeText(LoginUser.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    name = username.getText().toString().trim();
+                    database = FirebaseDatabase.getInstance();
+                    reference = database.getReference("users");
 
-                reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(!snapshot.exists()){
-                            reference.child(name).setValue(new Users(name, true, getCurrentTime(), userRole));
-                        }
-                        proceedToNextActivity(name);
-                        if (userRole.equals(CommonConstants.ROLE_USER)) {
-                            toUserHomepage();
-                        } else {
-                            toAdsMakerHomepage();
-                        }
+//                if(name != null && !name.isEmpty()){
+//                    disconnectCurrentUser();
+//                }
+                    if (name.isEmpty()) {
+                        Toast.makeText(LoginUser.this, "Please enter a valid username", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(LoginUser.this, "Database error", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    reference.child(name).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (!snapshot.exists()) {
+                                reference.child(name).setValue(new Users(name, true, getCurrentTime(), userRole));
+                            }
+                            proceedToNextActivity(name);
+                            if (userRole.equals(CommonConstants.ROLE_USER)) {
+                                toUserHomepage();
+                            } else {
+                                toAdsMakerHomepage();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(LoginUser.this, "Database error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
 
-            }
-        });
+                }
+            });
     }
 
 
