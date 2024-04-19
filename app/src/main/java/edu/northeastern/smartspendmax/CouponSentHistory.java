@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -86,7 +87,8 @@ public class CouponSentHistory extends AppCompatActivity {
                     .setMessage("Are you sure you want to sign out?")
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                         // Intent to navigate back to the LoginActivity
-                        Intent intent = new Intent(CouponSentHistory.this, LoginAdsMaker.class);
+                        Toast.makeText(CouponSentHistory.this, "AdMaker Logged Out", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(CouponSentHistory.this, Login.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();
