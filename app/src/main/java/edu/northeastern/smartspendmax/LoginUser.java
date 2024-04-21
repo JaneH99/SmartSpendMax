@@ -140,7 +140,7 @@ public class LoginUser extends AppCompatActivity {
     private void disconnectCurrentUser() {
         SharedPreferences sharedPref = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         String currentUserName = sharedPref.getString("LastLoggedInUser", null);
-        if (currentUserName != null) {
+        if (currentUserName != null && database != null) {
             DatabaseReference userRef = database.getReference("users").child(currentUserName);
             userRef.child("online").setValue(false);
         }
