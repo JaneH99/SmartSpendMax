@@ -1,10 +1,13 @@
 package edu.northeastern.smartspendmax.notification;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.northeastern.smartspendmax.MainActivity;
 import edu.northeastern.smartspendmax.R;
 import edu.northeastern.smartspendmax.model.Coupon;
 
@@ -52,6 +56,15 @@ public class NotificationActivity extends AppCompatActivity {
 
         db = FirebaseDatabase.getInstance();
 //        getReceivedCoupons();
+        OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+        dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.d(TAG, "handleOnBackPressed");
+                Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
         getCollectedCoupons();
     }
 
