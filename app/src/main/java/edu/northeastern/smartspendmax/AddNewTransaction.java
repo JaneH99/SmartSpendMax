@@ -27,6 +27,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 
+/**
+ * Retired Activity. Moved content to AddNewTransactionAIFragment
+ */
+
 public class AddNewTransaction extends AppCompatActivity {
 
     private Spinner spinner;

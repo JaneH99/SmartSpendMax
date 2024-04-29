@@ -32,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -159,7 +158,7 @@ public class InsightFragment extends Fragment {
                 // Replace the current fragment with BudgetFragment
                 if(getActivity() != null) {
                     getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new BudgetFragment())
+                            .replace(R.id.fragment_container, new AddNewTransactionAIFragment())
                             .addToBackStack(null)
                             .commit();
                 }
