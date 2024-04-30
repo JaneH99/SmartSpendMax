@@ -26,7 +26,8 @@
         android:layout_height="429dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
-        android:background="@drawable/transparent_bf_dark_bordered" />
+        android:background="@drawable/transparent_bf_dark_bordered"
+        app:srcCompat="@mipmap/test_receipt_foreground"/>
 
     <!-- CardView at the bottom of the RelativeLayout -->
     <androidx.cardview.widget.CardView

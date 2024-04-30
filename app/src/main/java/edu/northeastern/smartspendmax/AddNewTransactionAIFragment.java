@@ -19,8 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,7 +75,8 @@ public class AddNewTransactionAIFragment extends Fragment {
 
     private String userVoiceInput;
     private TextView myAudioTextView;
-    private Button micButton, imgButton;
+    private Button micButton;
+    private Button imageButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,18 +97,7 @@ public class AddNewTransactionAIFragment extends Fragment {
 
         micButton = view.findViewById(R.id.recordAudioButton);
         myAudioTextView = view.findViewById(R.id.myAudioInput);
-        imgButton = view.findViewById(R.id.recordImageButton);
-
-        imgButton.setOnClickListener(v -> {
-            //onConfirmButtonPressed();
-            // Replace the current fragment with AddNewTransactionFragment
-            if(getActivity() != null) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new InvoiceFragment())
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+        imageButton = view.findViewById(R.id.recordImageButton);
 
         //Set today's date as default transaction date
         date = LocalDate.now();
@@ -127,6 +119,7 @@ public class AddNewTransactionAIFragment extends Fragment {
             }
         });
 
+        //Click listener for Save button
         saveTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +131,7 @@ public class AddNewTransactionAIFragment extends Fragment {
             }
         });
 
+        //Click listener for record audio button
         micButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +139,53 @@ public class AddNewTransactionAIFragment extends Fragment {
 //                processAudio();
             }
         });
+
+        //Click listener or image button
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment invoiceFragment = new InvoiceFragment();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, invoiceFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+
+        //Check if user get information from Invoice Fragment
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            InvoiceInformation invoiceInformation = (InvoiceInformation) bundle.getSerializable("information");
+            if(invoiceInformation != null) {
+                if(invoiceInformation.getInvoiceVendor() != null) {
+                    transactionVendor.setText(invoiceInformation.getInvoiceVendor());
+                }
+                if(invoiceInformation.getInvoiceAmount() != null) {
+                    transactionAmount.setText(String.valueOf(invoiceInformation.getInvoiceAmount()));
+                }
+                if(invoiceInformation.getInvoiceDate() != null) {
+                    transactionDate.setText(String.valueOf(invoiceInformation.getInvoiceDate()));
+                }
+                if(invoiceInformation.getInvoiceCategory() != null) {
+                    String transactionCategory = invoiceInformation.getInvoiceCategory();
+                    Log.d("TAG", transactionCategory);
+                    if(transactionCategory.trim().equals("Housing")) {
+                        spinner.setSelection(1);
+                    } else if(transactionCategory.trim().equals("Transportation")) {
+                        spinner.setSelection(2);
+                    } else if(transactionCategory.trim().equals("Grocery")) {
+                        spinner.setSelection(3);
+                    } else if(transactionCategory.trim().equals("Utilities")) {
+                        spinner.setSelection(4);
+                    }else if(transactionCategory.trim().equals("Personal Expense")) {
+                        spinner.setSelection(5);
+                    }else if(transactionCategory.trim().equals("Other")) {
+                        spinner.setSelection(6);
+                    }
+                }
+            }
+        }
 
         return view;
 
