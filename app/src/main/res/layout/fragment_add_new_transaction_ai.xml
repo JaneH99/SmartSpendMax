@@ -161,11 +161,11 @@
                     android:background="@drawable/transparent_bf_bordered"
                     android:backgroundTint="@color/colorDarkGrey"
                     android:fontFamily="@font/sourcesans700"
-                    android:layout_toLeftOf="@+id/recordAudioButton"
+                    android:layout_toLeftOf="@+id/recordImageButton"
                     android:layout_weight="1.8"/>
 
                 <Button
-                    android:id="@+id/recordAudioButton"
+                    android:id="@+id/recordImageButton"
                     android:layout_width="16dp"
                     android:layout_height="45dp"
                     android:layout_marginLeft="25dp"
@@ -176,11 +176,11 @@
                     android:drawableBottom="@drawable/baseline_insert_photo_24" />
 
                 <Button
-                    android:id="@+id/recorImage"
+                    android:id="@+id/recordAudioButton"
                     android:layout_width="16dp"
                     android:layout_height="45dp"
                     android:backgroundTint="@color/colorPrimary"
-                    android:layout_toRightOf="@+id/recordAudioButton"
+                    android:layout_toRightOf="@+id/recordImageButton"
                     android:layout_marginLeft="25dp"
                     android:layout_weight="0.6"
                     android:background="@drawable/round_button"
@@ -197,7 +197,7 @@
 
     <TextView
         android:id="@+id/myAudioInput"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
@@ -207,7 +207,8 @@
         android:background="@drawable/transparent_bf_bordered"
         android:backgroundTint="@color/colorGrey"
         android:padding="16dp"
-        android:text="I purchased $50 stuff in Whole Foods on May 5, 2024"
+        android:text=""
+        android:hint="Press Microphone Incon for Audio Input..."
         android:textSize="16sp" />
 
 </RelativeLayout>

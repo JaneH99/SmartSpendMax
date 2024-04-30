@@ -129,8 +129,8 @@ public class AddNewTransactionAIFragment extends Fragment {
         micButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                speak(requireContext());
-                processAudio();
+                speak(requireContext());
+//                processAudio();
             }
         });
 
@@ -272,10 +272,25 @@ public class AddNewTransactionAIFragment extends Fragment {
 
         if (key != null) {
             dbRef.child(key).setValue(transactoionInfo)
-                    .addOnSuccessListener(aVoid -> Toast.makeText(requireContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show())
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(requireContext(), "Transaction saved successfully", Toast.LENGTH_SHORT).show();
+                        cleanUserInput();
+                    })
                     .addOnFailureListener(
                             e -> Toast.makeText(requireContext(), "Failed to save the transaction", Toast.LENGTH_SHORT).show());
         }
+    }
+
+    private void cleanUserInput() {
+        spinner.setSelection(0);
+        transactionVendor.setText("");
+        transactionAmount.setText("");
+        //Set today's date as default transaction date
+        date = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String formattedDate = date.format(formatter);
+        transactionDate.setText(formattedDate);
+        myAudioTextView.setText("");
     }
 
     private void showDatePickerDialog() {
