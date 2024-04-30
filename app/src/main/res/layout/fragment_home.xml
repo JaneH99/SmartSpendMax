@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment"
+    android:background="@drawable/gradient_bg"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
     <TextView
@@ -13,41 +14,51 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textStyle="bold"
-        android:text="HOME"
-        android:textSize="20dp"
+        android:text="HELLO,"
+        android:textSize="24dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/sourcesans300"
+        android:textColor="@color/colorBlack"/>
 
     <TextView
-        android:id="@+id/tv_summary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:text="Summary"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@id/chart_overall"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_marginRight="15dp"
-        android:text="(MM/YYYY)"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/chart_overall"
+        android:id="@+id/home_userName"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:layout_marginTop="2dp"
-        android:layout_below="@id/tv_month" />
+        android:layout_height="48dp"
+        android:textStyle="bold"
+        android:text="JESSICA"
+        android:textSize="38dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/tt_ramillas_bold"
+        android:textColor="@color/colorBlack"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/customized_card_background"
+        android:layout_marginTop="130dp">
+
+        <TextView
+            android:id="@+id/tv_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/chart_overall"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="155dp"
+            android:fontFamily="@font/sourcesans700"
+            android:gravity="center"
+            android:text="(MM/YYYY)"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chart_overall"
+            android:layout_width="match_parent"
+            android:layout_height="307dp"
+            android:layout_below="@id/tv_month"
+            android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/tv_rv_coupons_label"
@@ -55,11 +66,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/chart_overall"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Featured"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:fontFamily="@font/sourcesans700"
+        android:gravity="top"
+        />
 
     <TextView
         android:id="@+id/tv_rv_coupons_placeholder"
@@ -69,15 +82,17 @@
         android:layout_below="@+id/chart_overall"
         android:layout_marginTop="100dp"
         android:textSize="16dp"
+        android:fontFamily="@font/dm_sans_regular"
         android:layout_centerHorizontal="true"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_coupons"
+    <ImageView
+        android:id="@+id/ads"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:src="@drawable/ad_gemini"
         android:layout_below="@id/tv_rv_coupons_label"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_centerHorizontal="true"/>
+        android:foregroundGravity="bottom"
+        android:layout_marginTop="0dp"
+        />
+    </RelativeLayout>
 </RelativeLayout>

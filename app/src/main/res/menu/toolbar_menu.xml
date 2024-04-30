@@ -5,11 +5,13 @@
     <item
         android:id="@+id/notification"
         android:icon="@drawable/baseline_notifications_24"
+        android:iconTint="@color/colorPrimaryDark"
         android:title="Notification"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/signout"
         android:icon="@drawable/baseline_logout_24"
         android:title="Log Out"
+        android:iconTint="@color/colorPrimaryDark"
         app:showAsAction="ifRoom"/>
 </menu>

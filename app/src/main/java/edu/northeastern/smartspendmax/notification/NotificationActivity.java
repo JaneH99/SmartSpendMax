@@ -111,26 +111,26 @@ public class NotificationActivity extends AppCompatActivity {
     }
 
     private void getCouponDetails() {
-        for (String couponId : couponIDList) {
-//            Query query = couponsRef.orderByKey().equalTo(couponId);
-//            Log.d(TAG, "getCouponContentList: couponsRef.child(couponId): " + couponsRef.child(couponId)); // 只打印路径名：https://group-21-smartspendmax-default-rtdb.firebaseio.com/coupons/coupon1
-            db.getReference("coupons").child(couponId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Coupon coupon = snapshot.getValue(Coupon.class);
-                    coupon.setCouponId(couponId);
-                    couponList.add(coupon);
-                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
-                    Log.d(TAG, "getCouponContentList: notificationList size: " + couponList.size());
-                    recyclerView.setAdapter(adapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
+//        for (String couponId : couponIDList) {
+////            Query query = couponsRef.orderByKey().equalTo(couponId);
+////            Log.d(TAG, "getCouponContentList: couponsRef.child(couponId): " + couponsRef.child(couponId)); // 只打印路径名：https://group-21-smartspendmax-default-rtdb.firebaseio.com/coupons/coupon1
+////            db.getReference("coupons").child(couponId).addListenerForSingleValueEvent(new ValueEventListener() {
+////                @Override
+////                public void onDataChange(@NonNull DataSnapshot snapshot) {
+////                    Coupon coupon = snapshot.getValue(Coupon.class);
+////                    coupon.setCouponId(couponId);
+////                    couponList.add(coupon);
+////                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
+////                    Log.d(TAG, "getCouponContentList: notificationList size: " + couponList.size());
+////                    recyclerView.setAdapter(adapter);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
 
     }
 
@@ -152,7 +152,7 @@ public class NotificationActivity extends AppCompatActivity {
                     String couponId = couponSnapshot.getKey();
                     collectedCoupons.add(couponId);
                 }
-                getCouponDetailWithCollectedInfo();
+                //getCouponDetailWithCollectedInfo();
             }
 
             @Override
@@ -162,29 +162,29 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
-    private void getCouponDetailWithCollectedInfo() {
-        for (String couponId : receivedCoupons) {
-            db.getReference("coupons").child(couponId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Coupon coupon = snapshot.getValue(Coupon.class);
-                    coupon.setCouponId(couponId);
-                    if (collectedCoupons.contains(couponId)) {
-                        coupon.setCollected(true);
-                    } else {
-                        coupon.setCollected(false);
-                    }
-                    couponList.add(coupon);
-                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
-                    recyclerView.setAdapter(adapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-
-    }
+//    private void getCouponDetailWithCollectedInfo() {
+//        for (String couponId : receivedCoupons) {
+//            db.getReference("coupons").child(couponId).addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    Coupon coupon = snapshot.getValue(Coupon.class);
+//                    coupon.setCouponId(couponId);
+//                    if (collectedCoupons.contains(couponId)) {
+//                        coupon.setCollected(true);
+//                    } else {
+//                        coupon.setCollected(false);
+//                    }
+//                    couponList.add(coupon);
+//                    CouponAdapter adapter = new CouponAdapter(NotificationActivity.this, couponList, currUserId);
+//                    recyclerView.setAdapter(adapter);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
+//
+//    }
 }
