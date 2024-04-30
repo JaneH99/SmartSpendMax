@@ -3,7 +3,7 @@
     <style name="Base.Theme.SmartSpendMax" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorSelectedTransparent_high</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@color/colorWhite</item>
         <item name="colorOnPrimary">@color/colorDefaultBackground</item>

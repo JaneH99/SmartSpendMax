@@ -79,7 +79,7 @@
                 android:layout_toRightOf="@id/transactionDateText"
                 android:layout_marginStart="100dp"
                 android:hint="2024/03/13"
-                android:textColorHint="@color/colorGrey"
+                android:textColorHint="@color/colorGrey_0.5"
                 android:textColor="@color/colorWhite"
                 android:inputType="date"
                 android:layout_alignParentStart="true" />
@@ -113,7 +113,7 @@
                 android:layout_toRightOf="@id/transactionVendorText"
                 android:layout_marginStart="100dp"
                 android:inputType="text"
-                android:textColorHint="@color/colorGrey"
+                android:textColorHint="@color/colorGrey_0.5"
                 android:textColor="@color/colorWhite"
                 android:layout_alignParentStart="true"
                 android:fontFamily="@font/sourcesans400"
@@ -138,7 +138,7 @@
                 android:layout_toRightOf="@id/transactionAmountText"
                 android:layout_marginStart="100dp"
                 android:inputType="numberDecimal"
-                android:textColorHint="@color/colorGrey"
+                android:textColorHint="@color/colorGrey_0.5"
                 android:textColor="@color/colorWhite"
                 android:layout_alignParentStart="true"
                 android:fontFamily="@font/sourcesans400"
@@ -158,8 +158,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SAVE"
-                    android:background="@drawable/transparent_bf_bordered"
-                    android:backgroundTint="@color/colorDarkGrey"
+                    android:background="@drawable/transparent_bf_dark_bordered"
+                    android:backgroundTint="@color/colorWhite"
                     android:fontFamily="@font/sourcesans700"
                     android:layout_toLeftOf="@+id/recordImageButton"
                     android:layout_weight="1.8"/>
@@ -171,7 +171,7 @@
                     android:layout_marginLeft="25dp"
                     android:layout_toRightOf="@+id/transactionSave"
                     android:layout_weight="0.6"
-                    android:background="@drawable/round_button"
+                    android:backgroundTint="@color/colorPrimary"
                     android:contentDescription="Mic Icon"
                     android:drawableBottom="@drawable/baseline_insert_photo_24" />
 
@@ -179,11 +179,10 @@
                     android:id="@+id/recordAudioButton"
                     android:layout_width="16dp"
                     android:layout_height="45dp"
-                    android:backgroundTint="@color/colorPrimary"
                     android:layout_toRightOf="@+id/recordImageButton"
                     android:layout_marginLeft="25dp"
                     android:layout_weight="0.6"
-                    android:background="@drawable/round_button"
+                    android:backgroundTint="@color/colorPrimary"
                     android:drawableBottom="@drawable/baseline_mic_24" />
 
             </LinearLayout>

@@ -8,6 +8,7 @@
     <color name="colorPrimaryLight">#ECF45B</color>
     <color name="colorAccent">#D33D61</color>
     <color name="colorGrey">#E5E5E5</color>
+    <color name="colorGrey_0.5">#99E5E5E5</color>
 
     <!-- Standard colors for Banners / secondary fragments -->
     <color name="color">#E1474D</color>
@@ -32,6 +33,7 @@
     <color name="colorDarkGrey">#303030</color>
     <color name="colorSelected">#605F63</color>
     <color name="colorSelectedTransparent">#BF605F63</color>
+    <color name="colorSelectedTransparent_high">#99605F63</color>
     <color name="transparent">#1AFFFFFF</color>
 
 </resources>

@@ -239,10 +239,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, null)
                     .show();
             return true;
-        } else if (itemID == R.id.notification) {
-            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-            startActivity(intent);
         }
+//        else if (itemID == R.id.notification) {
+//            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+//            startActivity(intent);
+//        }
         return true;
     }
 
