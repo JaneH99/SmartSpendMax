@@ -5,7 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient_bg2"
-    tools:context=".WalletFragment">
+    tools:context=".InvoiceFragment">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:textStyle="bold"
+        android:text="ADD NEW TRANSACTION"
+        android:textSize="28dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/sourcesans900"
+        android:textColor="@color/colorBlack"/>
 
     <!-- ImageView at the top of the RelativeLayout -->
     <ImageView
@@ -13,7 +25,7 @@
         android:layout_width="359dp"
         android:layout_height="429dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="68dp"
         android:background="@drawable/transparent_bf_dark_bordered" />
 
     <!-- CardView at the bottom of the RelativeLayout -->
@@ -22,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_display"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
@@ -47,19 +59,19 @@
 
                 <ImageButton
                     android:id="@+id/selectFromGallery"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="16dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/baseline_insert_photo_24"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:layout_margin="12dp"
                     android:background="@drawable/round_button"
-                    android:contentDescription="Select from gallery" />
+                    android:contentDescription="Select from gallery"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/baseline_insert_photo_24" />
 
                 <ImageButton
                     android:id="@+id/selectFromCamera"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="16dp"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:layout_margin="12dp"
                     android:src="@drawable/baseline_camera_alt_24"
                     android:scaleType="centerCrop"
                     android:background="@drawable/round_button"
@@ -67,9 +79,9 @@
 
                 <ImageButton
                     android:id="@+id/selectFromLink"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_margin="16dp"
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:layout_margin="12dp"
                     android:src="@drawable/baseline_link_24"
                     android:scaleType="centerCrop"
                     android:background="@drawable/round_button"

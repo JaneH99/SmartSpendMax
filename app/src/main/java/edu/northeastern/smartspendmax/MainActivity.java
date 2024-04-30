@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddNewTransactionAIFragment()).commit();
             return true;
         } else if (itemID == R.id.wallet) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InvoiceFragment()).commit();
             return true;
         }
         return false;
@@ -239,10 +239,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton(android.R.string.no, null)
                     .show();
             return true;
-        } else if (itemID == R.id.notification) {
-            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-            startActivity(intent);
         }
+//        else if (itemID == R.id.notification) {
+//            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+//            startActivity(intent);
+//        }
         return true;
     }
 
