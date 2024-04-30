@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddNewTransactionAIFragment()).commit();
             return true;
         } else if (itemID == R.id.wallet) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InvoiceFragment()).commit();
             return true;
         }
         return false;
