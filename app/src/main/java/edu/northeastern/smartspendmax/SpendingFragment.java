@@ -8,10 +8,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -158,11 +161,14 @@ public class SpendingFragment extends Fragment {
         return LocalDate.parse(timestamp,formatter);
     }
 
+    //Direct to the add new transaction fragment
     private void addNewTransaction() {
-        Intent intent = new Intent(requireContext(), AddNewTransaction.class);
-        startActivity(intent);
+        Fragment addTransactionFragment = new AddNewTransactionAIFragment();
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, addTransactionFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();

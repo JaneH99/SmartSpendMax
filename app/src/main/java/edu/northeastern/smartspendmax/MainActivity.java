@@ -24,7 +24,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
@@ -36,11 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -149,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SpendingFragment()).commit();
             return true;
         } else if (itemID == R.id.budget) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new BudgetFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddNewTransactionAIFragment()).commit();
             return true;
         } else if (itemID == R.id.wallet) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new WalletFragment()).commit();
