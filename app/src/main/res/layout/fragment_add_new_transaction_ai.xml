@@ -173,8 +173,7 @@
                     android:layout_weight="0.6"
                     android:background="@drawable/round_button"
                     android:contentDescription="Mic Icon"
-                    android:drawableBottom="@drawable/baseline_insert_photo_24"
-                    android:src="@drawable/baseline_mic_24" />
+                    android:drawableBottom="@drawable/baseline_insert_photo_24" />
 
                 <Button
                     android:id="@+id/recorImage"

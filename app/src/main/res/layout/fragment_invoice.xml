@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/gradient_bg2"
+    tools:context=".WalletFragment">
+
+    <!-- ImageView at the top of the RelativeLayout -->
+    <ImageView
+        android:id="@+id/iv_display"
+        android:layout_width="359dp"
+        android:layout_height="429dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/transparent_bf_dark_bordered" />
+
+    <!-- CardView at the bottom of the RelativeLayout -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/select_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_display"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="20dp"
+        app:cardCornerRadius="24dp"
+        app:cardBackgroundColor="#F8F8FA">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack"
+            android:padding="16dp"
+            android:gravity="center">
+
+            <!-- LinearLayout for buttons inside CardView -->
+            <LinearLayout
+                android:id="@+id/button_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/selectFromGallery"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/baseline_insert_photo_24"
+                    android:background="@drawable/round_button"
+                    android:contentDescription="Select from gallery" />
+
+                <ImageButton
+                    android:id="@+id/selectFromCamera"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/baseline_camera_alt_24"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/round_button"
+                    android:contentDescription="Select from camera" />
+
+                <ImageButton
+                    android:id="@+id/selectFromLink"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/baseline_link_24"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/round_button"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:contentDescription="Select from link" />
+
+            </LinearLayout>
+
+            <!-- Button inside CardView -->
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/button_container"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/transparent_bf_bordered"
+                android:backgroundTint="@color/colorDarkGrey"
+                android:fontFamily="@font/sourcesans700"
+                android:text="CONFIRM" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

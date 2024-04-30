@@ -6,14 +6,21 @@ import static com.github.mikephil.charting.components.Legend.LegendOrientation.V
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,12 +54,12 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     private View view;
-
     private PieChart overallChart;
-    private TextView tv_month, tv_rv_coupons_placeholder;
+    private TextView tv_month;
     private List<PieEntry> pieEntryList = new ArrayList<>();
     private int totalBudget;
     private int totalSpending;
+    private double spendingPercentage;
     private FirebaseDatabase db;
     private String currUserId = "";
 
@@ -61,11 +68,6 @@ public class HomeFragment extends Fragment {
 
     private String firstDayOfMonth;
     private String lastDayOfMonth;
-
-    private RecyclerView recyclerView;
-
-    private List<String> uncollectedCouponIds = new ArrayList<>();
-    private List<Coupon> uncollectedCouponDetails = new ArrayList<>();
     private int orientation;
 
     @Override
@@ -75,31 +77,17 @@ public class HomeFragment extends Fragment {
 
         overallChart = view.findViewById(R.id.chart_overall);
         tv_month = view.findViewById(R.id.tv_month);
-        tv_rv_coupons_placeholder = view.findViewById(R.id.tv_rv_coupons_placeholder);
-        tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
+
         getCurrentMonth();
         tv_month.setText(currYear + "/" + String.format("%02d", currMonth));
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         currUserId = sharedPref.getString("LastLoggedInUser", "defaultUser");
-        Log.d(TAG, "currUserId = " + currUserId);
 
-        // collect data
         totalBudget = 0;
         totalSpending = 0;
         db = FirebaseDatabase.getInstance();
         getTotalSpending();
-
-        orientation = getResources().getConfiguration().orientation;
-        // show coupons horizontally
-        recyclerView = view.findViewById(R.id.rv_coupons);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
-        } else {
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
-        }
-
-       // getUncollectedCouponIds();
 
         return view;
     }
@@ -166,53 +154,54 @@ public class HomeFragment extends Fragment {
     }
 
     private void assembleChart() {
-        // assemble chart
+        // Calculate spending percentage
+        double spendingPercentage = (double) totalSpending / totalBudget * 100;
+        Log.d(TAG, "SPENDING PERCENTAGE IS: " + spendingPercentage + "SPENDING IS: " + totalSpending + "BUDGET IS: " + totalBudget);
+
         PieDataSet pieDataSet = new PieDataSet(pieEntryList, "");
         pieEntryList.add(new PieEntry(totalSpending, "Total Spending"));
         pieEntryList.add(new PieEntry(totalBudget - totalSpending, "Remaining Budget"));
 
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(getResources().getColor(R.color.colorPrimary));
-        colors.add(getResources().getColor(R.color.colorPrimaryLight));
-
+        colors.add(getResources().getColor(R.color.colorDarkGrey));
         pieDataSet.setColors(colors);
 
-        pieDataSet.setDrawValues(true); // Ensure values are drawn
-        pieDataSet.setValueFormatter(new PercentFormatter(overallChart)); // Format values as percentages
+        pieDataSet.setDrawValues(true);
+        pieDataSet.setValueFormatter(new PercentFormatter(overallChart));
         overallChart.setUsePercentValues(true);
-        pieDataSet.setValueTextColor(getResources().getColor(R.color.colorWhite));
-        pieDataSet.setValueTextSize(16f);
 
         PieData pieData = new PieData(pieDataSet);
         overallChart.setData(pieData);
         overallChart.setDrawEntryLabels(false);
-        Legend legend = overallChart.getLegend();
-        legend.setEnabled(true);
-        legend.setOrientation(HORIZONTAL);
-        legend.setXOffset(120f);
-        legend.setYOffset(0f);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            overallChart.setExtraOffsets(3, 3, 3, 3);
-            legend.setOrientation(VERTICAL);
-            legend.setXOffset(20f);
-            legend.setYOffset(20f);
-        } else {
-            overallChart.setExtraOffsets(8, 8, 8, 8);
-            legend.setOrientation(HORIZONTAL);
-            legend.setXOffset(120f);
-            legend.setYOffset(0f);
-        }
+        overallChart.getLegend().setEnabled(false);
         overallChart.getDescription().setEnabled(false);
-        overallChart.setCenterText("Expenses: " + totalSpending +
-                "\n" + "Budget: " + totalBudget);
-        overallChart.setCenterTextColor(R.color.colorPrimaryDark);
+        overallChart.setHoleColor(getResources().getColor(R.color.colorBlack));
+
+        // Format the center text
+        String formattedCenterText = String.format("%.1f%%\nSpending: %d/%d", spendingPercentage, totalSpending, totalBudget);
+        SpannableString centerText = new SpannableString(formattedCenterText);
+
+        // Set custom font and size for the percentage
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.tt_ramillas_bold);
+        int percentEndIndex = formattedCenterText.indexOf("%") + 1;
+        centerText.setSpan(new CustomTypefaceSpan("", typeface), 0, percentEndIndex, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        centerText.setSpan(new RelativeSizeSpan(2f), 0, percentEndIndex, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        centerText.setSpan(new ForegroundColorSpan(Color.WHITE), 0, percentEndIndex, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        // Set color and size for the rest of the text
+        centerText.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorPrimaryLight)), percentEndIndex, formattedCenterText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        centerText.setSpan(new RelativeSizeSpan(0.5f), percentEndIndex, formattedCenterText.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        overallChart.setCenterText(centerText);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             overallChart.setCenterTextSize(14f);
         } else {
-            overallChart.setCenterTextSize(18f);
+            overallChart.setCenterTextSize(22f);
         }
-        overallChart.invalidate();
+        overallChart.invalidate(); // Refresh the chart to apply changes
     }
+
 
 //    private void getUncollectedCouponIds() {
 //        DatabaseReference userCouponRef = db.getReference("user-coupon/" + currUserId);
