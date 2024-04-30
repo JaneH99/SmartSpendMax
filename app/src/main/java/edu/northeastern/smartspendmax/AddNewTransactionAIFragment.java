@@ -73,7 +73,7 @@ public class AddNewTransactionAIFragment extends Fragment {
 
     private String userVoiceInput;
     private TextView myAudioTextView;
-    private Button micButton;
+    private Button micButton, imgButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,6 +94,18 @@ public class AddNewTransactionAIFragment extends Fragment {
 
         micButton = view.findViewById(R.id.recordAudioButton);
         myAudioTextView = view.findViewById(R.id.myAudioInput);
+        imgButton = view.findViewById(R.id.recordImageButton);
+
+        imgButton.setOnClickListener(v -> {
+            //onConfirmButtonPressed();
+            // Replace the current fragment with AddNewTransactionFragment
+            if(getActivity() != null) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new InvoiceFragment())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         //Set today's date as default transaction date
         date = LocalDate.now();
@@ -314,4 +326,6 @@ public class AddNewTransactionAIFragment extends Fragment {
         );
         datePickerDialog.show();
     }
+
+
 }

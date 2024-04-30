@@ -87,7 +87,7 @@ public class InvoiceFragment extends Fragment {
 
             view.findViewById(R.id.selectFromGallery).setOnClickListener(v -> loadImageFromGallery());
             view.findViewById(R.id.selectFromCamera).setOnClickListener(v -> loadImageFromCamera());
-            view.findViewById(R.id.selectFromLink).setOnClickListener(v -> loadImageFromLink( imageUrl));
+            view.findViewById(R.id.selectFromLink).setOnClickListener(v -> showUrlInputDialog());
 
             return view;
         }
@@ -187,6 +187,25 @@ public class InvoiceFragment extends Fragment {
             invoiceImage = imageBitmap;
         }
     }
+    private void showUrlInputDialog() {
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_url, null);
+        EditText editTextUrl = dialogView.findViewById(R.id.et_url_input);
 
+        // Create and show the AlertDialog
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    String url = editTextUrl.getText().toString().trim();
+                    if (!url.isEmpty()) {
+                        loadImageFromLink(url);
+                    } else {
+                        Toast.makeText(getContext(), "Please enter a valid URL.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel())
+                .create();
+        dialog.show();
+    }
 
 }
