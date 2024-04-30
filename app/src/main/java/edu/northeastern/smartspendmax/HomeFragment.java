@@ -99,7 +99,7 @@ public class HomeFragment extends Fragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
         }
 
-        getUncollectedCouponIds();
+       // getUncollectedCouponIds();
 
         return view;
     }
@@ -214,66 +214,66 @@ public class HomeFragment extends Fragment {
         overallChart.invalidate();
     }
 
-    private void getUncollectedCouponIds() {
-        DatabaseReference userCouponRef = db.getReference("user-coupon/" + currUserId);
-        List<String> receivedCoupons = new ArrayList<>();
-        List<String> collectedCoupons = new ArrayList<>();
-        userCouponRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Retrieve receivedCoupon
-                DataSnapshot receivedCouponSnapshot = snapshot.child("receivedCoupon");
-                for (DataSnapshot couponSnapshot : receivedCouponSnapshot.getChildren()) {
-                    String couponId = couponSnapshot.getKey();
-                    receivedCoupons.add(couponId);
-                }
+//    private void getUncollectedCouponIds() {
+//        DatabaseReference userCouponRef = db.getReference("user-coupon/" + currUserId);
+//        List<String> receivedCoupons = new ArrayList<>();
+//        List<String> collectedCoupons = new ArrayList<>();
+//        userCouponRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                // Retrieve receivedCoupon
+//                DataSnapshot receivedCouponSnapshot = snapshot.child("receivedCoupon");
+//                for (DataSnapshot couponSnapshot : receivedCouponSnapshot.getChildren()) {
+//                    String couponId = couponSnapshot.getKey();
+//                    receivedCoupons.add(couponId);
+//                }
+//
+//                // Retrieve collectedCoupon
+//                DataSnapshot collectedCouponSnapshot = snapshot.child("collectedCoupon");
+//                for (DataSnapshot couponSnapshot : collectedCouponSnapshot.getChildren()) {
+//                    String couponId = couponSnapshot.getKey();
+//                    collectedCoupons.add(couponId);
+//                }
+//                for (String c : receivedCoupons) {
+//                    if (!collectedCoupons.contains(c)) {
+//                        uncollectedCouponIds.add(c);
+//                    }
+//                }
+//                if (uncollectedCouponIds.size() == 0) {
+//                    tv_rv_coupons_placeholder.setVisibility(View.VISIBLE);
+//                } else {
+//                    tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
+//                    getCouponDetails();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 
-                // Retrieve collectedCoupon
-                DataSnapshot collectedCouponSnapshot = snapshot.child("collectedCoupon");
-                for (DataSnapshot couponSnapshot : collectedCouponSnapshot.getChildren()) {
-                    String couponId = couponSnapshot.getKey();
-                    collectedCoupons.add(couponId);
-                }
-                for (String c : receivedCoupons) {
-                    if (!collectedCoupons.contains(c)) {
-                        uncollectedCouponIds.add(c);
-                    }
-                }
-                if (uncollectedCouponIds.size() == 0) {
-                    tv_rv_coupons_placeholder.setVisibility(View.VISIBLE);
-                } else {
-                    tv_rv_coupons_placeholder.setVisibility(View.INVISIBLE);
-                    getCouponDetails();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void getCouponDetails() {
-        for (String couponId : uncollectedCouponIds) {
-            Log.d(TAG, "uncollected coupon id: " + couponId);
-            db.getReference("coupons").child(couponId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Coupon coupon = snapshot.getValue(Coupon.class);
-                    coupon.setCouponId(couponId);
-                    coupon.setCollected(false);
-                    uncollectedCouponDetails.add(coupon);
-                    CouponAdapter adapter = new CouponAdapter(view.getContext(), uncollectedCouponDetails, currUserId);
-                    recyclerView.setAdapter(adapter);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-
-    }
+//    private void getCouponDetails() {
+//        for (String couponId : uncollectedCouponIds) {
+//            Log.d(TAG, "uncollected coupon id: " + couponId);
+//            db.getReference("coupons").child(couponId).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    Coupon coupon = snapshot.getValue(Coupon.class);
+//                    coupon.setCouponId(couponId);
+//                    coupon.setCollected(false);
+//                    uncollectedCouponDetails.add(coupon);
+//                    CouponAdapter adapter = new CouponAdapter(view.getContext(), uncollectedCouponDetails, currUserId);
+//                    recyclerView.setAdapter(adapter);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
+//
+//    }
 }

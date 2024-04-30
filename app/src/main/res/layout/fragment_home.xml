@@ -14,10 +14,11 @@
         android:layout_height="30dp"
         android:textStyle="bold"
         android:text="HOME"
-        android:textSize="20dp"
+        android:textSize="28dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/sourcesans900"
+        android:textColor="@color/colorBlack"/>
 
     <TextView
         android:id="@+id/tv_summary"
@@ -25,9 +26,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="?attr/actionBarSize"
-        android:text="Summary"
-        android:textColor="@color/colorPrimary"
+        android:text="Total Spending"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="20dp"
+        android:fontFamily="@font/sourcesans700"
         android:textStyle="bold" />
 
     <TextView
@@ -38,7 +40,8 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:layout_marginRight="15dp"
         android:text="(MM/YYYY)"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
+        android:fontFamily="@font/sourcesans700"
         android:textSize="20dp"
         android:textStyle="bold"/>
 
@@ -59,7 +62,10 @@
         android:text="Featured"
         android:textColor="@color/colorPrimary"
         android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="@font/dm_sans_regular"
+        android:gravity="top"
+        />
 
     <TextView
         android:id="@+id/tv_rv_coupons_placeholder"
@@ -69,15 +75,15 @@
         android:layout_below="@+id/chart_overall"
         android:layout_marginTop="100dp"
         android:textSize="16dp"
+        android:fontFamily="@font/dm_sans_regular"
         android:layout_centerHorizontal="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_coupons"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@id/tv_rv_coupons_label"
-        android:layout_marginTop="12dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@id/chart_overall"
+        android:foregroundGravity="bottom"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/customized_card_background" />
 </RelativeLayout>

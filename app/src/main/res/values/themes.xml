@@ -6,12 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@color/colorWhite</item>
-        <item name="colorOnPrimary">@color/colorWhite</item>
+        <item name="colorOnPrimary">@color/colorDefaultBackground</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondary">@color/colorPrimaryDark</item>
         <item name="colorOnSecondary">@color/colorWhite</item>
+
+        <!-- Default text color -->
+        <item name="android:textColor">@color/colorDarkGrey</item>
+
+        <!-- Navigation bar color -->
+        <item name="android:navigationBarColor">@color/colorBlack</item>
+
+        <item name="android:fontFamily">@font/sourcesans400</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/colorBlack</item>
     </style>
 
     <style name="Theme.SmartSpendMax" parent="Base.Theme.SmartSpendMax" />

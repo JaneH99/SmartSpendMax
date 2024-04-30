@@ -4,24 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorDefaultBackground"
     tools:context=".SpendingFragment">
 
     <TextView
         android:id="@+id/spending_text"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:textStyle="bold"
-        android:text="SPENDING"
-        android:textSize="20dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="18dp"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/sourcesans900"
+        android:text="SPENDING"
+        android:textColor="@color/colorBlack"
+        android:textSize="28dp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/spending_text" />
+        android:layout_height="664dp"
+        android:layout_below="@id/spending_text"
+        android:layout_marginTop="20dp"
+        android:background="@color/colorDefaultBackground"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

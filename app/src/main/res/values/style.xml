@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Set the background color of the BottomNavigationView -->
+        <item name="android:background">@color/design_default_color_background</item>
+        <!-- Set the item text color -->
+        <item name="itemTextColor">@color/colorSelected</item>
+        <!-- Set the item background color (when selected) -->
+        <item name="itemBackground">@drawable/bottom_nav_item_background</item>
+        <!-- Increase the icon size -->
+        <item name="itemIconSize">45dp</item> <!-- Adjust the size as needed -->
+        <!-- Shift the icon upwards when selected -->
+        <item name="itemHorizontalTranslationEnabled">true</item>
+    </style>
+
+
+</resources>
+
+

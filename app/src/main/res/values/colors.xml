@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base application colors -->
-    <color name="colorPrimary">#89A4B7</color>
-    <color name="colorSecondary">#406E8E</color>
-    <color name="colorPrimaryDark">#303A56</color> <!-- buttons -->
-    <color name="colorPrimaryMedium">#336D97</color>
-    <color name="colorPrimaryLight">#D8E8E9</color>
-    <color name="colorAccent">#CE4141</color>
-    <color name="colorGrey">#d9d9d9</color>
+    <color name="colorPrimary">#CBEA15</color>
+    <color name="colorSecondary">#39BC80</color>
+    <color name="colorPrimaryDark">#1B6846</color> <!-- buttons -->
+    <color name="colorPrimaryMedium">#2FA46F</color>
+    <color name="colorPrimaryLight">#ECF45B</color>
+    <color name="colorAccent">#D33D61</color>
+    <color name="colorGrey">#E5E5E5</color>
 
     <!-- Standard colors for Banners / secondary fragments -->
     <color name="color">#E1474D</color>
@@ -26,9 +26,12 @@
 
     <!-- Colors for Basics -->
     <color name="colorWhite">#FFFFFF</color>
-    <color name="colorDefaultBackground">#FFF7FF</color>
+    <color name="colorDefaultBackground">#FCFAED</color>
+    <color name="colorTransBackground">#A6FCFAED</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorShadow">#FBBAB0</color>
-    <color name="colorSelected">#303A56</color>
+    <color name="colorDarkGrey">#303030</color>
+    <color name="colorSelected">#605F63</color>
+    <color name="colorSelectedTransparent">#BF605F63</color>
+    <color name="transparent">#1AFFFFFF</color>
 
 </resources>

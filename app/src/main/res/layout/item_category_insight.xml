@@ -75,6 +75,7 @@
             android:layout_height="24dp"
             android:layout_margin="6dp"
             android:background="@drawable/progress_bar_background"
+            android:progressDrawable="@drawable/progress_bar"
             android:indeterminate="false"
             android:max="100"
             android:progress="50"/>

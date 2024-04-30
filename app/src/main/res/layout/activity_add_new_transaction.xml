@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddNewTransaction">
+    tools:context=".AddNewTransaction"
+    android:background="@drawable/gradient_bg">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
         app:title="SPENDING"
-        app:titleTextColor="@android:color/white"
+        android:fontFamily="@font/sourcesans900"
+        android:textColor="@color/colorBlack"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
@@ -25,21 +26,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:elevation="20dp"
         app:cardBackgroundColor="#F8F8FA"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="360dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:background="@color/colorBlack"
+            android:padding="16dp"
+            >
 
             <TextView
                 android:id="@+id/transactionCategoryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Category:"
-                android:textColor="@android:color/black"
+                android:fontFamily="@font/sourcesans700"
+                android:textColor="@color/design_default_color_background"
                 android:textSize="16sp"
                 android:layout_marginTop="12dp"/>
 
@@ -57,7 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date:"
-                android:textColor="@android:color/black"
+                android:fontFamily="@font/sourcesans700"
+                android:textColor="@color/design_default_color_background"
                 android:textSize="16sp"
                 android:layout_below="@id/transactionCategoryText"
                 android:layout_marginTop="24dp"/>
@@ -78,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_calendar_month_24"
+                android:foregroundTint="@color/design_default_color_background"
                 android:layout_below="@+id/spinnerTransactionCategory"
                 android:layout_toRightOf="@+id/transactionDate"
                 android:contentDescription="Calendar Icon" />
@@ -88,7 +94,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Vendor:"
-                android:textColor="@android:color/black"
+                android:fontFamily="@font/sourcesans700"
+                android:textColor="@color/design_default_color_background"
+
                 android:textSize="16sp"
                 android:layout_below="@id/transactionDateText"
                 android:layout_marginTop="24dp"/>
@@ -109,7 +117,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Amount:"
-                android:textColor="@android:color/black"
+                android:fontFamily="@font/sourcesans700"
+                android:textColor="@color/design_default_color_background"
                 android:textSize="16sp"
                 android:layout_below="@id/transactionVendorText"
                 android:layout_marginTop="24dp"/>
@@ -127,17 +136,47 @@
 
             <Button
                 android:id="@+id/transactionSave"
-                android:layout_width="wrap_content"
+                android:layout_width="177dp"
                 android:layout_height="wrap_content"
-                android:text="SAVE"
-                android:backgroundTint="@color/colorPrimary"
                 android:layout_below="@id/transactionAmountText"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="30dp" />
+                android:layout_marginTop="30dp"
+                android:background="@drawable/transparent_bf_bordered"
+                android:backgroundTint="@color/colorDarkGrey"
+                android:fontFamily="@font/sourcesans700"
+                android:text="SAVE" />
+
+            <Button
+                android:id="@+id/imageInput"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/transactionAmountText"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/transactionSave"
+                android:background="@drawable/round_button"
+                android:drawableBottom="@drawable/baseline_insert_photo_24"
+                tools:layout_editor_absoluteX="214dp"
+                tools:layout_editor_absoluteY="611dp" />
+
+            <Button
+                android:id="@+id/audioInput"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/transactionAmountText"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/imageInput"
+                android:background="@drawable/round_button"
+                android:drawableBottom="@drawable/baseline_mic_24"
+                android:text="Image"
+                tools:layout_editor_absoluteX="214dp"
+                tools:layout_editor_absoluteY="611dp" />
 
         </RelativeLayout>
 
 
     </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

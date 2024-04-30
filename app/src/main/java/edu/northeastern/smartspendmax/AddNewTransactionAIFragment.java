@@ -73,7 +73,7 @@ public class AddNewTransactionAIFragment extends Fragment {
 
     private String userVoiceInput;
     private TextView myAudioTextView;
-    private ImageButton micButton;
+    private Button micButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
