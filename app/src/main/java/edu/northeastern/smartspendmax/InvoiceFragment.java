@@ -114,11 +114,11 @@ public class InvoiceFragment extends Fragment {
                     processImage(getContext(), new ImageProcessingCallback() {
                         @Override
                         public void onImageProcessed() {
-                            //pass the information to add new transaction fragment
                             Fragment addNewTransactionAIFragment = new AddNewTransactionAIFragment();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("information",invoiceInformation);
                             addNewTransactionAIFragment.setArguments(bundle);
+                            ((OnFragmentSwitchListener) requireActivity()).onFragmentSwitch("AddNewTransactionAIFragment");
                             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                             fragmentTransaction.replace(R.id.fragment_container, addNewTransactionAIFragment);
                             fragmentTransaction.addToBackStack(null);

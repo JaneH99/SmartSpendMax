@@ -16,12 +16,12 @@
         android:title="Spending"/>
 
     <item
-        android:id="@+id/budget"
+        android:id="@+id/expenseGenie"
         android:icon="@drawable/baseline_gemini_24"
         android:title="Expense Genie"/>
 
     <item
-        android:id="@+id/wallet"
+        android:id="@+id/invoice"
         android:icon="@drawable/baseline_photos_24"
         android:title="Invoice"/>
 

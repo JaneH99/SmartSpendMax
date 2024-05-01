@@ -150,20 +150,6 @@ public class InsightFragment extends Fragment {
         fetchBudgetData();
         onDataFetchComplete();
 
-        //Floating Button
-        fab = view.findViewById(R.id.edit_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the current fragment with BudgetFragment
-                if(getActivity() != null) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new AddNewTransactionAIFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
-            }
-        });
         return view;
     }
 

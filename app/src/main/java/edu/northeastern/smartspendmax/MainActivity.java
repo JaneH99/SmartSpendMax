@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.northeastern.smartspendmax.notification.NotificationActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnFragmentSwitchListener {
 
     private Handler uiHandler;
     private Executor backgroundExecutor;
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     private String currentDescription;
     private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
     private int curFragmentID;
+    private BottomNavigationView bottomNavigationView;
+
     @NonNull
     @Override
     public OnBackInvokedDispatcher getOnBackInvokedDispatcher() {
@@ -80,7 +82,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         Toolbar toolBar = findViewById(R.id.toolbar);
         ImageView imageViewProgress = findViewById(R.id.loadingProgress);
@@ -159,10 +162,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemID == R.id.spending) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SpendingFragment()).commit();
             return true;
-        } else if (itemID == R.id.budget) {
+        } else if (itemID == R.id.expenseGenie) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddNewTransactionAIFragment()).commit();
             return true;
-        } else if (itemID == R.id.wallet) {
+        } else if (itemID == R.id.invoice) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InvoiceFragment()).commit();
             return true;
         }
@@ -337,4 +340,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onFragmentSwitch(String fragmentTag) {
+        if(fragmentTag.equals("AddNewTransactionAIFragment")) {
+            bottomNavigationView.setSelectedItemId(R.id.expenseGenie);
+        } else if(fragmentTag.equals("Invoice")) {
+            bottomNavigationView.setSelectedItemId(R.id.invoice);
+        }
+    }
 }

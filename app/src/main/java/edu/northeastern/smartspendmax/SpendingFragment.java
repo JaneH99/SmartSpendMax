@@ -168,6 +168,7 @@ public class SpendingFragment extends Fragment {
         transaction.replace(R.id.fragment_container, addTransactionFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        ((OnFragmentSwitchListener) requireActivity()).onFragmentSwitch("AddNewTransactionAIFragment");
     }
     @Override
     public void onDestroy() {
