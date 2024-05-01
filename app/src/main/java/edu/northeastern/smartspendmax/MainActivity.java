@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
     private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
     private int curFragmentID;
     private BottomNavigationView bottomNavigationView;
+    Toolbar toolBar;
 
     @NonNull
     @Override
@@ -82,10 +83,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView = findViewById(R.id.bottomNavigation);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        Toolbar toolBar = findViewById(R.id.toolbar);
+        toolBar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolBar);
         ImageView imageViewProgress = findViewById(R.id.loadingProgress);
 
         backgroundExecutor = Executors.newSingleThreadExecutor();
@@ -114,40 +114,15 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
                         .setTitle("Sign Out")
                         .setMessage("Are you sure you want to sign out?")
                         .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                            // User clicked "Yes" button, perform exit action
+                            // User clicked "Yes" button, perform sign out and navigate to LoginUser
+                            Toast.makeText(MainActivity.this, "User Logged Out", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this, Login.class);
+                            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                             finish();
                         })
                         .setNegativeButton(android.R.string.no, null)
                         .show();
-            }
-        });
-
-        //Initiate a value in case it is null
-        currentAdMaker = "Ads Maker";
-        currentDescription ="You received a promotion";
-        // Initialize Firebase Database
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("coupons");
-        // Initialize ScheduledExecutorService with a single thread
-        executor = Executors.newSingleThreadScheduledExecutor();
-        //Create Notification Channel
-        //createNotificationChannel();
-        //Collect a set to store all existing coupons
-        couponCollection = new HashSet<>();
-        // Initialize couponCollection with existing coupons' keys in the database. Then start monitoring changes
-        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (isFinishing()) return;
-                for (DataSnapshot entrySnapshot : dataSnapshot.getChildren()) {
-                    couponCollection.add(entrySnapshot.getKey());
-                }
-                // Start listening for changes in Firebase Database
-                startListening();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle database error
             }
         });
     }
@@ -187,51 +162,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
         super.onSaveInstanceState(outState);
     }
 
-    private void startListening() {
-        // Schedule a task to listen for changes in Firebase Database every 1 minute
-        scheduledFuture = executor.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                mValueEventListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot entrySnapshot : dataSnapshot.getChildren()) {
-                            String key = entrySnapshot.getKey();
-                            // Handle data change here
-                            if (key != null) {
-                                Log.d(LOG, key);
-                                if (!couponCollection.contains(key)) {
-                                    couponCollection.add(key);
-                                    Log.d(LOG, "You have a new coupon " + key);
-                                    //Retrieve information
-                                    Map<String, Object> map = (Map<String, Object>) entrySnapshot.getValue();
-                                    if(map != null) {
-                                        currentAdMaker = Objects.requireNonNull(map.get("adMakerName")).toString();
-                                        Log.d(LOG, "currentAdMaker " );
-                                        currentDescription = Objects.requireNonNull(map.get("description")).toString();
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                            Log.d(LOG, "sendNotification" );
-                                            sendNotification(getBaseContext());
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle database error
-                    }
-                };
-
-                // Start listening for changes in Firebase Database
-                mDatabaseReference.addValueEventListener(mValueEventListener);
-            }
-        }, 0, 1, TimeUnit.MINUTES); // Initial delay: 0, Repeat interval: 1 minute
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
@@ -242,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemID = item.getItemId();
         if (itemID == R.id.signout) {
+            Log.d(LOG, "onOptionsItemSelected: signout");
             new AlertDialog.Builder(MainActivity.this)
                     .setTitle("Sign Out")
                     .setMessage("Are you sure you want to sign out?")
@@ -257,65 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentSwitchL
                     .show();
             return true;
         }
-//        else if (itemID == R.id.notification) {
-//            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
-//            startActivity(intent);
-//        }
         return true;
-    }
-
-//    private void createNotificationChannel() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-//            channel.setDescription(CHANNEL_DESC);
-//            NotificationManager manager = getSystemService(NotificationManager.class);
-//            manager.createNotificationChannel(channel);
-//        }
-//    }
-
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    public void sendNotification(Context context) {
-        // Prepare intent which is triggered if the notification is selected
-        Intent intent = new Intent(context, NotificationActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_stat_notification)
-                        .setContentTitle(currentAdMaker)
-                        .setContentText(currentDescription)
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .setAutoCancel(true)
-                        .setContentIntent(pIntent);
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATION_PERMISSION);
-            return;
-        }
-
-        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == NOTIFICATION_PERMISSION) {
-            boolean permissionGranted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-            if(!permissionGranted) {
-                Toast.makeText(getApplicationContext(), "You won't receive notifications unless you grant notification permission", Toast.LENGTH_LONG).show();
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    sendNotification(getBaseContext());
-                }
-            }
-        }
     }
 
     @Override
