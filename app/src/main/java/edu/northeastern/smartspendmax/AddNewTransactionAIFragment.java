@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -33,9 +35,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -105,6 +110,7 @@ public class AddNewTransactionAIFragment extends Fragment {
         String formattedDate = date.format(formatter);
         transactionDate.setText(formattedDate);
 
+
         //Spinner for transaction category
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 requireContext(),R.array.transactionCategoryArray, android.R.layout.simple_spinner_item
@@ -141,6 +147,7 @@ public class AddNewTransactionAIFragment extends Fragment {
         });
 
         //Click listener or image button
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

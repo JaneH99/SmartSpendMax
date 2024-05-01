@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/chart_overall"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="155dp"
+            android:layout_marginRight="150dp"
             android:fontFamily="@font/sourcesans700"
             android:gravity="center"
             android:text="(MM/YYYY)"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="307dp"
             android:layout_below="@id/tv_month"
-            android:layout_marginTop="2dp" />
+            android:layout_marginTop="6dp" />
 
     <TextView
         android:id="@+id/tv_rv_coupons_label"
