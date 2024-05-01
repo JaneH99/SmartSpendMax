@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
     private PieChart overallChart;
-    private TextView tv_month;
+    private TextView tv_month, tv_curUserName;
     private List<PieEntry> pieEntryList = new ArrayList<>();
     private int totalBudget;
     private int totalSpending;
@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
 
         overallChart = view.findViewById(R.id.chart_overall);
         tv_month = view.findViewById(R.id.tv_month);
+        tv_curUserName = view.findViewById(R.id.home_userName);
 
         getCurrentMonth();
         tv_month.setText(currYear + "/" + String.format("%02d", currMonth));
@@ -84,6 +85,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("AppPrefs", MODE_PRIVATE);
         currUserId = sharedPref.getString("LastLoggedInUser", "defaultUser");
 
+        tv_curUserName.setText(currUserId.toUpperCase());
         totalBudget = 0;
         totalSpending = 0;
         db = FirebaseDatabase.getInstance();

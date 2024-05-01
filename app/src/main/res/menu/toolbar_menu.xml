@@ -12,6 +12,5 @@
         android:id="@+id/signout"
         android:icon="@drawable/baseline_logout_24"
         android:title="Log Out"
-        android:iconTint="@color/colorDarkGrey"
         app:showAsAction="ifRoom"/>
 </menu>

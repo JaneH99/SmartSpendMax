@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -78,6 +79,7 @@ public class InvoiceFragment extends Fragment {
     private static final String AMOUNT = "amount";
     private static final String CATEGORY = "category";
     private static String TAG = "INVOICE FRAGMENT";
+    private static final String FILE_PROVIDER_AUTHORITY = "com.example.smartspendmaxgemini.fileprovider";
 
     public interface ImageProcessingCallback{
         void onImageProcessed();
@@ -90,6 +92,8 @@ public class InvoiceFragment extends Fragment {
             imageView = view.findViewById(R.id.iv_display);
             imageUri = createUri();
             confirmButton = view.findViewById(R.id.btn_confirm);
+
+            setupTakePictureLauncher();
 
             invoiceInformation = new InvoiceInformation();
             confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -186,12 +190,12 @@ public class InvoiceFragment extends Fragment {
 
     private Uri createUri(){
         File imageFile = new File(getContext().getFilesDir(), "camera_photo.jpg");
-        return FileProvider.getUriForFile(
-                getContext(),
-                "smartspendmax.provider",
-                imageFile
-        );
+        return FileProvider.getUriForFile(getContext(),
+                FILE_PROVIDER_AUTHORITY,
+                imageFile);
+
     }
+
 
     private void loadImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -218,28 +222,37 @@ public class InvoiceFragment extends Fragment {
         });
     }
 
+    private void registerTakePictureLauncher() {
+        takePictureLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
+            if (result) {
+                imageView.setImageURI(null);
+                imageView.setImageURI(imageUri); // Refresh the ImageView with new image
+            } else {
+                Toast.makeText(getContext(), "Failed to capture image", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void loadImageFromCamera() {
         if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions( new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+            requestPermissions(new String[]{android.Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         } else {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            imageUri = createUri();
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri); // Set the file Uri to save the photo
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                takePictureLauncher.launch(imageUri);
-            } else {
-                Toast.makeText(getContext(), "No application can handle this request.", Toast.LENGTH_SHORT).show();
-            }
+            imageUri = createUri(); // Ensure this URI is correctly created
+            takePictureLauncher.launch(imageUri);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_PERMISSION_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadImageFromCamera();
-        } else {
-            Toast.makeText(getContext(), "Camera permission is required to use camera.", Toast.LENGTH_SHORT).show();
+
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePictureLauncher.launch(imageUri);  // Permission was granted, continue with camera.
+            } else {
+                Toast.makeText(getContext(), "Camera permission is necessary to take photos", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

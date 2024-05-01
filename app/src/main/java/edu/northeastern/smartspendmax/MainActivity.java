@@ -21,12 +21,16 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.window.OnBackInvokedDispatcher;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -47,16 +52,17 @@ import edu.northeastern.smartspendmax.notification.NotificationActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Handler mHandler;
+    private Handler uiHandler;
+    private Executor backgroundExecutor;
+    private ScheduledExecutorService executor;
     private DatabaseReference mDatabaseReference;
     private ValueEventListener mValueEventListener;
     private ValueEventListener initialValueEventListener;
-    private ScheduledExecutorService executor;
     private ScheduledFuture<?> scheduledFuture;
     private static final String LOG = "-----Coupon Test-----";
     private HashSet<String> couponCollection;
     private static final String CHANNEL_ID = "smart_spend_max";
-    private static final String CHANNEL_NAME = "SmartSpendMax";
+    //private static final String CHANNEL_NAME = "SmartSpendMax";
     private static final String CHANNEL_DESC = "Discount Promotions for Users";
     private static final int NOTIFICATION_ID = 9;
     private static final int NOTIFICATION_PERMISSION = 9009;
@@ -77,7 +83,15 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         Toolbar toolBar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolBar);
+        ImageView imageViewProgress = findViewById(R.id.loadingProgress);
+
+        backgroundExecutor = Executors.newSingleThreadExecutor();
+        uiHandler = new Handler(Looper.getMainLooper());
+
+        ImageView iv_Progress = findViewById(R.id.loadingProgress);
+        Glide.with(this)
+                .load(R.drawable.loading_progress_bar)
+                .into(imageViewProgress);
 
         initiateFragment(savedInstanceState);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -113,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize ScheduledExecutorService with a single thread
         executor = Executors.newSingleThreadScheduledExecutor();
         //Create Notification Channel
-        createNotificationChannel();
+        //createNotificationChannel();
         //Collect a set to store all existing coupons
         couponCollection = new HashSet<>();
         // Initialize couponCollection with existing coupons' keys in the database. Then start monitoring changes
@@ -247,14 +261,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription(CHANNEL_DESC);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-    }
+//    private void createNotificationChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+//            channel.setDescription(CHANNEL_DESC);
+//            NotificationManager manager = getSystemService(NotificationManager.class);
+//            manager.createNotificationChannel(channel);
+//        }
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     public void sendNotification(Context context) {
@@ -308,5 +322,19 @@ public class MainActivity extends AppCompatActivity {
             mDatabaseReference.removeEventListener(mValueEventListener);
         }
     }
+
+    public void showLoadingIndicator() {
+        ImageView imageViewProgress = findViewById(R.id.loadingProgress);
+        Glide.with(this)
+                .load(R.drawable.loading_progress_bar)
+                .into(imageViewProgress);
+        imageViewProgress.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoadingIndicator() {
+        ImageView imageViewProgress = findViewById(R.id.loadingProgress);
+        imageViewProgress.setVisibility(View.GONE);
+    }
+
 
 }
