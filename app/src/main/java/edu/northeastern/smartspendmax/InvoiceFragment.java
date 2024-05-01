@@ -127,7 +127,8 @@ public class InvoiceFragment extends Fragment {
                 /* apiKey */ "AIzaSyCzG_y8db6c-iSOv-r4AIl21C6kC2jP3Qk");
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.test_receipt_foreground);
+//        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.test_receipt_foreground);
+        Bitmap image = invoiceImage;
 
         HashMap<String, String> questionMap = new HashMap<>();
         questionMap.put("What's the store name in the receipt?. Only show the store name without description.", VENDOR);
@@ -152,19 +153,21 @@ public class InvoiceFragment extends Fragment {
                 @Override
                 public void onSuccess(GenerateContentResponse result) {
                     String resultText = result.getText();
-                    switch (info) {
-                        case VENDOR:
-                            invoiceInformation.setInvoiceVendor(resultText);
-                            break;
-                        case TRANS_DATE:
-                            invoiceInformation.setInvoiceDate(resultText);
-                            break;
-                        case AMOUNT:
-                            invoiceInformation.setInvoiceAmount(resultText);
-                            break;
-                        case CATEGORY:
-                            invoiceInformation.setInvoiceCategory(resultText);
-                            break;
+                    if(resultText != null) {
+                        switch (info) {
+                            case VENDOR:
+                                invoiceInformation.setInvoiceVendor(resultText.trim());
+                                break;
+                            case TRANS_DATE:
+                                invoiceInformation.setInvoiceDate(resultText.trim());
+                                break;
+                            case AMOUNT:
+                                invoiceInformation.setInvoiceAmount(resultText.trim());
+                                break;
+                            case CATEGORY:
+                                invoiceInformation.setInvoiceCategory(resultText.trim());
+                                break;
+                        }
                     }
                     Log.d(TAG,"Information added to class");
                     int count = responsesReceived.incrementAndGet();
