@@ -5,10 +5,12 @@ import static android.nfc.NdefRecord.createUri;
 import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -49,6 +52,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,25 +70,47 @@ public class InvoiceFragment extends Fragment {
     private ActivityResultLauncher<Intent> pickImageLauncher;
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Bitmap invoiceImage;
+    private Button confirmButton;
 
-        @Override
+    private InvoiceInformation invoiceInformation;
+    private static final String VENDOR = "vendor";
+    private static final String TRANS_DATE = "trans_date";
+    private static final String AMOUNT = "amount";
+    private static final String CATEGORY = "category";
+    private static String TAG = "INVOICE FRAGMENT";
+
+    public interface ImageProcessingCallback{
+        void onImageProcessed();
+    }
+
+    @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_invoice, container, false);
             imageView = view.findViewById(R.id.iv_display);
-            Button btnConfirm = view.findViewById(R.id.btn_confirm);
             imageUri = createUri();
+            confirmButton = view.findViewById(R.id.btn_confirm);
 
-            btnConfirm.setOnClickListener(v -> {
-                //onConfirmButtonPressed();
-                // Replace the current fragment with AddNewTransactionFragment
-                if(getActivity() != null) {
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new AddNewTransactionAIFragment())
-                            .addToBackStack(null)
-                            .commit();
+            invoiceInformation = new InvoiceInformation();
+            confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    processImage(getContext(), new ImageProcessingCallback() {
+                        @Override
+                        public void onImageProcessed() {
+                            //pass the information to add new transaction fragment
+                            Fragment addNewTransactionAIFragment = new AddNewTransactionAIFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("information",invoiceInformation);
+                            addNewTransactionAIFragment.setArguments(bundle);
+                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                            fragmentTransaction.replace(R.id.fragment_container, addNewTransactionAIFragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        }
+                    });
+
                 }
-
             });
 
             view.findViewById(R.id.selectFromGallery).setOnClickListener(v -> loadImageFromGallery());
@@ -92,19 +120,80 @@ public class InvoiceFragment extends Fragment {
             return view;
         }
 
-        private Uri createUri(){
-            File imageFile = new File(getContext().getFilesDir(), "camera_photo.jpg");
-            return FileProvider.getUriForFile(
-                    getContext(),
-                    "smartspendmax.provider",
-                    imageFile
-            );
-        }
+    private void processImage(Context context, ImageProcessingCallback callback) {
+        // For text-and-images input (multimodal), use the gemini-pro-vision model
+        GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-pro-vision",
+                // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+                /* apiKey */ "AIzaSyCzG_y8db6c-iSOv-r4AIl21C6kC2jP3Qk");
+        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-        private void loadImageFromGallery() {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, GALLERY_PERMISSION_CODE);
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.test_receipt_foreground);
+
+        HashMap<String, String> questionMap = new HashMap<>();
+        questionMap.put("What's the store name in the receipt?. Only show the store name without description.", VENDOR);
+        questionMap.put("What's the transaction date in the receipt? Only show the date in format MM/DD/YYYY.", TRANS_DATE);
+        questionMap.put("What's the total amount in the receipt? Please show amount only without dollar sign.", AMOUNT);
+        questionMap.put("Based on the store name, which category do you think the spending belongs to? Choose from categories listed below " +
+                "Housing,Transportation,Utilities,Grocery,Personal Expense,Other. Response with the category name without description", CATEGORY);
+
+        // Counter to track how many responses have been received
+        AtomicInteger responsesReceived = new AtomicInteger(0);
+
+        for(Map.Entry<String, String> entry: questionMap.entrySet()) {
+            String question = entry.getKey();
+            String info = entry.getValue();
+            Content content = new Content.Builder()
+                    .addText(question)
+                    .addImage(image)
+                    .build();
+
+            ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
+            Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
+                @Override
+                public void onSuccess(GenerateContentResponse result) {
+                    String resultText = result.getText();
+                    switch (info) {
+                        case VENDOR:
+                            invoiceInformation.setInvoiceVendor(resultText);
+                            break;
+                        case TRANS_DATE:
+                            invoiceInformation.setInvoiceDate(resultText);
+                            break;
+                        case AMOUNT:
+                            invoiceInformation.setInvoiceAmount(resultText);
+                            break;
+                        case CATEGORY:
+                            invoiceInformation.setInvoiceCategory(resultText);
+                            break;
+                    }
+                    Log.d(TAG,"Information added to class");
+                    int count = responsesReceived.incrementAndGet();
+                    if(count == questionMap.size()) {
+                        callback.onImageProcessed();
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+//                        textView.setText("Error");
+                }
+            }, this.requireContext().getMainExecutor());
         }
+    }
+
+    private Uri createUri(){
+        File imageFile = new File(getContext().getFilesDir(), "camera_photo.jpg");
+        return FileProvider.getUriForFile(
+                getContext(),
+                "smartspendmax.provider",
+                imageFile
+        );
+    }
+
+    private void loadImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, GALLERY_PERMISSION_CODE);
+    }
 
 
 
