@@ -9,6 +9,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -82,6 +83,8 @@ public class AddNewTransactionAIFragment extends Fragment {
     private TextView myAudioTextView;
     private Button micButton;
     private Button imageButton;
+    private static String TAG = "Add Transaction AI Fragment";
+    private String hiddenKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +106,17 @@ public class AddNewTransactionAIFragment extends Fragment {
         micButton = view.findViewById(R.id.recordAudioButton);
         myAudioTextView = view.findViewById(R.id.myAudioInput);
         imageButton = view.findViewById(R.id.recordImageButton);
+
+        //Get API key from meta data
+        String apiKey;
+        try {
+            ApplicationInfo ai = requireContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle metaData = ai.metaData;
+            String value = metaData.getString("keyValue");
+            hiddenKey = value != null ? value : "";
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+        }
 
         //Set today's date as default transaction date
         date = LocalDate.now();
@@ -245,7 +259,7 @@ public class AddNewTransactionAIFragment extends Fragment {
 
     private void processAudio() {
         String context = myAudioTextView.getText().toString();
-        GenerativeModel gm = new GenerativeModel("gemini-pro", "AIzaSyCzG_y8db6c-iSOv-r4AIl21C6kC2jP3Qk");
+        GenerativeModel gm = new GenerativeModel("gemini-pro", hiddenKey);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
         HashMap<String, View> questionMap = new HashMap<>();
         questionMap.put("What's the store name?. Only show the store name without description.", transactionVendor);
@@ -266,7 +280,7 @@ public class AddNewTransactionAIFragment extends Fragment {
                 Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                     @Override
                     public void onSuccess(GenerateContentResponse result) {
-                        String resultText = result.getText();
+                        String resultText = result.getText().trim();
                         if(view instanceof EditText) {
                             ((EditText) view).setText(resultText);
                         } else if(view instanceof Spinner) {
