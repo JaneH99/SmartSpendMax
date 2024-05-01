@@ -40,18 +40,4 @@
         android:layout_marginTop="2dp"
         android:layout_marginRight="8dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/edit_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="450dp"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/baseline_edit_24"
-        app:backgroundTint="@color/colorPrimary" />
-
-
 </RelativeLayout>

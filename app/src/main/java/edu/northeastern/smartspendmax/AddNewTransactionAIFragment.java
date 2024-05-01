@@ -170,6 +170,7 @@ public class AddNewTransactionAIFragment extends Fragment {
                 transaction.replace(R.id.fragment_container, invoiceFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+                ((OnFragmentSwitchListener) requireActivity()).onFragmentSwitch("Invoice");
             }
         });
 
