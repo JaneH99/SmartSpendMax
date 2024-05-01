@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,6 +56,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,7 +82,7 @@ public class InvoiceFragment extends Fragment {
     private static final String CATEGORY = "category";
     private static String TAG = "INVOICE FRAGMENT";
     private static final String FILE_PROVIDER_AUTHORITY = "com.example.smartspendmaxgemini.fileprovider";
-
+    private String hiddenKey;
     public interface ImageProcessingCallback{
         void onImageProcessed();
     }
@@ -92,6 +94,16 @@ public class InvoiceFragment extends Fragment {
             imageView = view.findViewById(R.id.iv_display);
             imageUri = createUri();
             confirmButton = view.findViewById(R.id.btn_confirm);
+
+            //Get API Key from MetaData
+            try {
+                ApplicationInfo ai = requireContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+                Bundle metaData = ai.metaData;
+                String value = metaData.getString("keyValue");
+                hiddenKey = value != null ? value : "";
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.d(TAG, Objects.requireNonNull(e.getMessage()));
+            }
 
             setupTakePictureLauncher();
 
@@ -128,7 +140,7 @@ public class InvoiceFragment extends Fragment {
         // For text-and-images input (multimodal), use the gemini-pro-vision model
         GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-pro-vision",
                 // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                /* apiKey */ "AIzaSyCzG_y8db6c-iSOv-r4AIl21C6kC2jP3Qk");
+                /* apiKey */ hiddenKey);
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
 //        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.test_receipt_foreground);
