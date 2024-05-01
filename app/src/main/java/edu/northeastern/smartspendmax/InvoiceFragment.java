@@ -129,6 +129,10 @@ public class InvoiceFragment extends Fragment {
 
 //        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.test_receipt_foreground);
         Bitmap image = invoiceImage;
+        if(image == null) {
+            Toast.makeText(context, "Please select an image", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         HashMap<String, String> questionMap = new HashMap<>();
         questionMap.put("What's the store name in the receipt?. Only show the store name without description.", VENDOR);
