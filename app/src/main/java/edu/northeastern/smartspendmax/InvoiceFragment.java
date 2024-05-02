@@ -88,53 +88,53 @@ public class InvoiceFragment extends Fragment {
     }
 
     @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_invoice, container, false);
-            imageView = view.findViewById(R.id.iv_display);
-            imageUri = createUri();
-            confirmButton = view.findViewById(R.id.btn_confirm);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_invoice, container, false);
+        imageView = view.findViewById(R.id.iv_display);
+        imageUri = createUri();
+        confirmButton = view.findViewById(R.id.btn_confirm);
 
-            //Get API Key from MetaData
-            try {
-                ApplicationInfo ai = requireContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
-                Bundle metaData = ai.metaData;
-                String value = metaData.getString("keyValue");
-                hiddenKey = value != null ? value : "";
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.d(TAG, Objects.requireNonNull(e.getMessage()));
-            }
-
-            setupTakePictureLauncher();
-
-            invoiceInformation = new InvoiceInformation();
-            confirmButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    processImage(getContext(), new ImageProcessingCallback() {
-                        @Override
-                        public void onImageProcessed() {
-                            Fragment addNewTransactionAIFragment = new AddNewTransactionAIFragment();
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("information",invoiceInformation);
-                            addNewTransactionAIFragment.setArguments(bundle);
-                            ((OnFragmentSwitchListener) requireActivity()).onFragmentSwitch("AddNewTransactionAIFragment");
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.fragment_container, addNewTransactionAIFragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                        }
-                    });
-
-                }
-            });
-
-            view.findViewById(R.id.selectFromGallery).setOnClickListener(v -> loadImageFromGallery());
-            view.findViewById(R.id.selectFromCamera).setOnClickListener(v -> loadImageFromCamera());
-            view.findViewById(R.id.selectFromLink).setOnClickListener(v -> showUrlInputDialog());
-
-            return view;
+        //Get API Key from MetaData
+        try {
+            ApplicationInfo ai = requireContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+            Bundle metaData = ai.metaData;
+            String value = metaData.getString("keyValue");
+            hiddenKey = value != null ? value : "";
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d(TAG, Objects.requireNonNull(e.getMessage()));
         }
+
+        setupTakePictureLauncher();
+
+        invoiceInformation = new InvoiceInformation();
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processImage(getContext(), new ImageProcessingCallback() {
+                    @Override
+                    public void onImageProcessed() {
+                        Fragment addNewTransactionAIFragment = new AddNewTransactionAIFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("information",invoiceInformation);
+                        addNewTransactionAIFragment.setArguments(bundle);
+                        ((OnFragmentSwitchListener) requireActivity()).onFragmentSwitch("AddNewTransactionAIFragment");
+                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, addNewTransactionAIFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                });
+
+            }
+        });
+
+        view.findViewById(R.id.selectFromGallery).setOnClickListener(v -> loadImageFromGallery());
+        view.findViewById(R.id.selectFromCamera).setOnClickListener(v -> loadImageFromCamera());
+        view.findViewById(R.id.selectFromLink).setOnClickListener(v -> showUrlInputDialog());
+
+        return view;
+    }
 
     private void processImage(Context context, ImageProcessingCallback callback) {
         // For text-and-images input (multimodal), use the gemini-pro-vision model

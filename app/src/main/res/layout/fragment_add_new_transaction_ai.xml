@@ -161,6 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SAVE"
+                    android:textColor="@color/colorWhite"
                     android:background="@drawable/transparent_bf_dark_bordered"
                     android:backgroundTint="@color/colorWhite"
                     android:fontFamily="@font/sourcesans700"
@@ -210,6 +211,7 @@
         android:backgroundTint="@color/colorGrey"
         android:padding="16dp"
         android:text=""
+        android:textColor="@color/colorBlack"
         android:hint="Press Microphone Incon for Audio Input..."
         android:textSize="16sp" />
 

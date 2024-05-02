@@ -19,6 +19,13 @@
         android:fontFamily="@font/sourcesans900"
         android:textColor="@color/colorBlack"/>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="83dp"
+        android:layout_height="84dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
     <!-- ImageView at the top of the RelativeLayout -->
     <ImageView
         android:id="@+id/iv_display"
@@ -98,10 +105,11 @@
                 android:layout_below="@id/button_container"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/transparent_bf_bordered"
-                android:backgroundTint="@color/colorDarkGrey"
+                android:background="@drawable/transparent_bf_dark_bordered"
+                android:backgroundTint="@color/colorWhite"
                 android:fontFamily="@font/sourcesans700"
-                android:text="CONFIRM" />
+                android:text="CONFIRM"
+                android:textColor="@color/colorWhite"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>
